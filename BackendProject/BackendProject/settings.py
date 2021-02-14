@@ -80,6 +80,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'BackendProject.wsgi.application'
 
 AUTH_USER_MODEL = 'API.User'
+ACCOUNT_ADAPTER = 'API.adapters.CustomUserAccountAdapter'
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
