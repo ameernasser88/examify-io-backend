@@ -30,3 +30,12 @@ class Student(models.Model):
 
     def __str__(self):
         return self.user.username
+
+
+class Supervisor(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    # TO DO
+    # supervisor model
+
+    def __str__(self):
+        return self.user.username
