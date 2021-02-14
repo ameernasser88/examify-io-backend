@@ -45,9 +45,16 @@ class Exam(models.Model):
     # TO DO
     # supervisor info
 
+class Answer(models.Model):
+    Question = models.ForeignKey('Question', on_delete=models.CASCADE , blank=True)
+    text = models.TextField()
+
+
 class Question(models.Model):
     Exam = models.ForeignKey(Exam, on_delete=models.CASCADE)
+    text = models.TextField()
     mark = models.FloatField()
-    previous_question = models.ForeignKey("Question" , on_delete=models.CASCADE)
+    previous_question = models.ForeignKey("Question" , on_delete=models.CASCADE , null=True)
+    question_answer = models.ForeignKey(Answer,on_delete=models.CASCADE)
     # TO DO
     # Question info
