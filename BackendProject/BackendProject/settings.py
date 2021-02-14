@@ -82,6 +82,9 @@ WSGI_APPLICATION = 'BackendProject.wsgi.application'
 AUTH_USER_MODEL = 'API.User'
 ACCOUNT_ADAPTER = 'API.adapters.CustomUserAccountAdapter'
 
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+ACCOUNT_AUTHENTICATION_METHOD = 'username'
+ACCOUNT_EMAIL_REQUIRED = False
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
