@@ -13,6 +13,16 @@ class User(AbstractUser):
     def __str__(self):
         return self.username
 
+
+class Teacher(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    # TO DO
+    # teacher info
+
+    def __str__(self):
+        return self.user.username
+
+
 class Student(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     # TO DO
