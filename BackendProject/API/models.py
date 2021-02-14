@@ -35,7 +35,19 @@ class Student(models.Model):
 class Supervisor(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     # TO DO
-    # supervisor model
+    # supervisor info
 
     def __str__(self):
         return self.user.username
+
+class Exam(models.Model):
+    teacher = models.ForeignKey(User, on_delete=models.CASCADE)
+    # TO DO
+    # supervisor info
+
+class Question(models.Model):
+    Exam = models.ForeignKey(Exam, on_delete=models.CASCADE)
+    mark = models.FloatField()
+    previous_question = models.ForeignKey("Question" , on_delete=models.CASCADE)
+    # TO DO
+    # Question info
