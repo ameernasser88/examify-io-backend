@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from django.db.models.signals import post_save
 
 class User(AbstractUser):
     USER_TYPE_CHOICES = (
@@ -60,17 +59,5 @@ class Question(models.Model):
     # Question info
 
 
-def update_user_type(sender , instance , created , **kwargs):
-    if created:
-        if instance.user_type == "1":
-            student = Student(user=instance)
-            student.save()
-        elif instance.user_type == "2":
-            teacher = Teacher(user=instance)
-            teacher.save()
-        else:
-            supervisor = Supervisor(user=instance)
-            supervisor.save()
-post_save.connect(update_user_type,sender=User)
 
 
