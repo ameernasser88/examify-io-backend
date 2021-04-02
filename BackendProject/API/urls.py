@@ -18,6 +18,7 @@ urlpatterns = [
 # password1
 # password2
 # email
+# user_type
 
 # /dj-rest-auth/login/ (POST)
 #
