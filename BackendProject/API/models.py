@@ -4,7 +4,7 @@ from django.contrib.auth.models import AbstractUser
 class User(AbstractUser):
     USER_TYPE_CHOICES = (
         ("1", 'student'),
-        ("2", 'teacher'),
+        ("2", 'examiner'),
         ("3", 'supervisor'),
     )
     user_type = models.CharField(choices=USER_TYPE_CHOICES,default="1",null=False , max_length=10)
@@ -13,7 +13,7 @@ class User(AbstractUser):
         return self.username
 
 
-class Teacher(models.Model):
+class Examiner(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     # TO DO
     # teacher info
