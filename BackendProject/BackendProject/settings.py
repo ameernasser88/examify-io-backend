@@ -25,7 +25,7 @@ SECRET_KEY = '-+=l@z%d#y!kzs5t3@ldik*zysg9(hp78+23$qque=rb+)(!59'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['http://ameernasser.pythonanywhere.com']
+ALLOWED_HOSTS = ['ameernasser.pythonanywhere.com']
 
 
 # Application definition
