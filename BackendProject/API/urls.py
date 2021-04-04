@@ -23,7 +23,7 @@ urlpatterns = [
 # /dj-rest-auth/login/ (POST)
 #
 # username
-# email
+# email ( not required )
 # password
 
 #/dj-rest-auth/logout/ (POST)
