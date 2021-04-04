@@ -9,8 +9,8 @@ def update_user_type(sender , instance , created , **kwargs):
             student = Student(user=instance)
             student.save()
         elif instance.user_type == "2":
-            teacher = Teacher(user=instance)
-            teacher.save()
+            examiner = Examiner(user=instance)
+            examiner.save()
         else:
             supervisor = Supervisor(user=instance)
             supervisor.save()
