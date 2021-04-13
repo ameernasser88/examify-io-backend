@@ -88,13 +88,25 @@ ACCOUNT_EMAIL_REQUIRED = False
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'examify',
+#         'USER': 'root',
+#         'PASSWORD': '123456789',
+#         'HOST': 'examify.cl5ad1fxwqy7.us-east-2.rds.amazonaws.com',
+#         'PORT': '5432'
+#     }
+# }
+
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'examify',
-        'USER': 'root',
-        'PASSWORD': '123456789',
-        'HOST': 'examify.cl5ad1fxwqy7.us-east-2.rds.amazonaws.com',
+        'NAME': 'xmkcqfah',
+        'USER': 'xmkcqfah',
+        'PASSWORD': '5JhO1HNVovv0BulLQLVe6nUNW7gvU7Bu',
+        'HOST': 'queenie.db.elephantsql.com',
         'PORT': '5432'
     }
 }
