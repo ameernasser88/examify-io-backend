@@ -90,8 +90,12 @@ ACCOUNT_EMAIL_REQUIRED = False
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'examify',
+        'USER': 'root',
+        'PASSWORD': '123456789',
+        'HOST': 'examify.cl5ad1fxwqy7.us-east-2.rds.amazonaws.com',
+        'PORT': '5432'
     }
 }
 
