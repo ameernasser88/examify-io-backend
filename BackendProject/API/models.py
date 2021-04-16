@@ -63,7 +63,7 @@ class Question(models.Model):
     exam = models.ForeignKey(Exam, default=None, on_delete=models.CASCADE)
     text = models.TextField()
     mark = models.FloatField(null = True)
-    previous_question = models.ForeignKey("Question" , on_delete=models.CASCADE , blank=True)
+    previous_question = models.ForeignKey("Question" , on_delete=models.CASCADE , null=True , blank=True)
     # question_answer = models.ForeignKey(Answer,on_delete=models.CASCADE, null= True)
     # TO DO
     # Question info
