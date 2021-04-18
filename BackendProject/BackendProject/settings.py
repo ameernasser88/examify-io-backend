@@ -25,7 +25,9 @@ SECRET_KEY = '-+=l@z%d#y!kzs5t3@ldik*zysg9(hp78+23$qque=rb+)(!59'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['ameernasser.pythonanywhere.com','127.0.0.1']
+ALLOWED_HOSTS = ['*']
+
+#['ameernasser.pythonanywhere.com','127.0.0.1']
 
 
 # Application definition
@@ -46,6 +48,8 @@ INSTALLED_APPS = [
     'dj_rest_auth',
     'dj_rest_auth.registration',
     'API.apps.ApiConfig',
+    'corsheaders',
+
 ]
 
 MIDDLEWARE = [
@@ -154,3 +158,5 @@ REST_FRAMEWORK = {
 REST_AUTH_SERIALIZERS = {
     'TOKEN_SERIALIZER': 'API.serializers.TokenSerializer',
 }
+
+CORS_ORIGIN_ALLOW_ALL = True
