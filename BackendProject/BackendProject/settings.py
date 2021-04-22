@@ -28,7 +28,6 @@ DEBUG = True
 ALLOWED_HOSTS = ['*']
 CORS_ALLOWED_ORIGINS = [
     "https://examify.vercel.app",
-    "examify.vercel.app"
 ]
 #CORS_ALLOWED_ORIGINS = []
 # CORS_ORIGIN_ALLOW_ALL = True
