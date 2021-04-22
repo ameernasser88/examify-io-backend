@@ -26,6 +26,12 @@ SECRET_KEY = '-+=l@z%d#y!kzs5t3@ldik*zysg9(hp78+23$qque=rb+)(!59'
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
+CORS_ALLOWED_ORIGINS = [
+    "https://examify.vercel.app",
+    "examify.vercel.app"
+]
+#CORS_ALLOWED_ORIGINS = []
+# CORS_ORIGIN_ALLOW_ALL = True
 
 #['ameernasser.pythonanywhere.com','127.0.0.1']
 
@@ -161,5 +167,3 @@ REST_AUTH_SERIALIZERS = {
     'TOKEN_SERIALIZER': 'API.serializers.TokenSerializer',
 }
 
-#CORS_ALLOWED_ORIGINS = []
-CORS_ORIGIN_ALLOW_ALL = True
