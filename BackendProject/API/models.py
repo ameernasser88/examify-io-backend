@@ -45,7 +45,7 @@ class Answer(models.Model):
     text = models.TextField()
     is_correct = models.BooleanField(default=True)
     def __str__(self) -> str:
-        qans = str(self.question)+  str(self.text)
+        qans = str(self.question)+str(self.text)
         return str(qans)
 class Exam(models.Model):
     examiner = models.ForeignKey(Examiner,default=None, on_delete=models.CASCADE)
@@ -67,11 +67,25 @@ class Question(models.Model):
     # question_answer = models.ForeignKey(Answer,on_delete=models.CASCADE, null= True)
     # TO DO
     # Question info
-
-
-
     def __str__(self) -> str:
         return str(self.text)
+
+class StudentAnswer(models.Model):
+    student = models.ForeignKey(Student,on_delete=models.CASCADE)
+    exam = models.ForeignKey(Exam, on_delete=models.CASCADE)
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    answer = models.ForeignKey(Answer, on_delete=models.CASCADE)
+
+    def __str__(self) -> str:
+        return "Student : " +str(self.student) + "Exam : " + str(self.exam) + "Question : " + str(self.question.id)
+
+class ExamResults(models.Model):
+    student = models.ForeignKey(Student,on_delete=models.CASCADE)
+    exam = models.ForeignKey(Exam, on_delete=models.CASCADE)
+    mark = models.FloatField()
+
+    def __str__(self) -> str:
+        return "Student : " +str(self.student) + "Exam : " + str(self.exam)
 
 
 
