@@ -79,7 +79,7 @@ python manage.py runserver
 # GET /exam/
 * General:
 - Returns exam list for the logged in examiner.
-* Sample: ``` http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/ ```
+* Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/ ```
 ```sh
 {
     {
@@ -94,7 +94,7 @@ python manage.py runserver
 # POST /exam/
 * General:
 - Returns exam list for the logged in examiner.
-* Sample: ``` http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/ -X POST -H "Content-Type: application/json" -d
+* Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/ -X POST -H "Content-Type: application/json" -d
             '{
             "exam_name":"Exam 1",
             }' 
@@ -112,7 +112,7 @@ python manage.py runserver
 # POST /exam/
 * General:
 - Returns exam list for the logged in examiner.
-* Sample: ``` http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/{exam_id}/question/ -X POST -H "Content-Type: application/json" -d
+* Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/{exam_id}/question/ -X POST -H "Content-Type: application/json" -d
             '{
             "text": "how old are you now wrong ?",
             "mark": 100
@@ -130,7 +130,7 @@ python manage.py runserver
 # POST /exam/
 * General:
 - Returns exam list for the logged in examiner.
-* Sample: ``` http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/question/{question_id}/answer/ -X POST -H "Content-Type: application/json" -d
+* Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/question/{question_id}/answer/ -X POST -H "Content-Type: application/json" -d
             '{
             "text":"15",
             "is_correct":true
