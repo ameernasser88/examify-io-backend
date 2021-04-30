@@ -42,3 +42,105 @@ To run the server, execute:
 ```bash
 python manage.py runserver
 ```
+## Endpoints
+# POST /dj-rest-auth/registration/
+* General:
+    - Returns Token and user type.
+* Sample: ``` curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/dj-rest-auth/registration/ -X POST -H "Content-Type: application/json" -d
+            '{
+                "username": "omar",
+                "password1":"Aa123456789",
+                "password2":"Aa123456789",
+                "email":"omar@omar.com",
+                "user_type":"1"
+                }' 
+            ```
+```sh
+{
+    "key": "52862e084f56792e2644b1801952a728a75fd8e5",
+    "user": 9
+}
+```
+# POST /dj-rest-auth/login/
+* General:
+- Returns Token and user type.
+* Sample: ``` curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/dj-rest-auth/login/ -X POST -H "Content-Type: application/json" -d
+            '{
+            "username": "omar",
+            "password":"Aa123456789"
+            }' 
+            ```
+```sh
+{
+    "key": "bd5188970056063a94afcf859820713f8cab743e",
+    "user": 2
+}
+```
+# GET /exam/
+* General:
+- Returns exam list for the logged in examiner.
+* Sample: ``` http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/ ```
+```sh
+{
+    {
+        "id": 1,
+        "exam_name": "Exam 1",
+        "exam_startdate": "2021-05-25T14:52:37Z",
+        "exam_duration": 3.0,
+        "examiner": 2
+    }
+}
+```
+# POST /exam/
+* General:
+- Returns exam list for the logged in examiner.
+* Sample: ``` http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/ -X POST -H "Content-Type: application/json" -d
+            '{
+            "exam_name":"Exam 1",
+            }' 
+            ```
+```sh
+{
+    "id": 1,
+    "exam_name": "Exam 1",
+    "exam_startdate": null,
+    "exam_duration": null,
+    "examiner": null
+}
+```
+
+# POST /exam/
+* General:
+- Returns exam list for the logged in examiner.
+* Sample: ``` http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/{exam_id}/question/ -X POST -H "Content-Type: application/json" -d
+            '{
+            "text": "how old are you now wrong ?",
+            "mark": 100
+            }' 
+        ```
+```sh
+{
+    "id": 6,
+    "text": "how old are you now?",
+    "mark": 100.0,
+    "exam": 1,
+    "previous_question": null
+}
+```
+# POST /exam/
+* General:
+- Returns exam list for the logged in examiner.
+* Sample: ``` http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/question/{question_id}/answer/ -X POST -H "Content-Type: application/json" -d
+            '{
+            "text":"15",
+            "is_correct":true
+            }' 
+        ```
+```sh
+{
+    "id": 3,
+    "text": "15",
+    "is_correct": true,
+    "question": 6
+}
+```
