@@ -17,11 +17,11 @@ class ExamView(APIView):
             user = Examiner.objects.get(user = request.user)
             serializer = ExamSerializer(data = request.data)
             if serializer.is_valid():
-                serializer.save()
-                exam_id = serializer.data['id']
-                exam = Exam.objects.get(pk = exam_id)
-                exam.examiner = user
-                exam.save() 
+                serializer.save(examiner = user)
+                # exam_id = serializer.data['id']
+                # exam = Exam.objects.get(pk = exam_id)
+                # exam.examiner = user
+                # exam.save() 
                 return Response(serializer.data,status= status.HTTP_201_CREATED)
             return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
         except Examiner.DoesNotExist:

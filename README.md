@@ -79,7 +79,7 @@ python manage.py runserver
 # GET /exam/
 * General:
 - Returns exam list for the logged in examiner.
-* Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/ ```
+* Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/ -H "Content-Type: application/json"  "Authorization: Token <ACCESS_TOKEN>"```
 ```sh
 {
     {
@@ -94,25 +94,27 @@ python manage.py runserver
 # POST /exam/
 * General:
 - Returns exam list for the logged in examiner.
-* Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/ -X POST -H "Content-Type: application/json" -d
+* Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/ -X POST -H "Content-Type: application/json"  "Authorization: Token <ACCESS_TOKEN>" -d
             '{
             "exam_name":"Exam 1",
+            "exam_startdate":"2021-05-27 02:25:33+02:00",
+            "exam_duration": 3.0
             }' 
             ```
 ```sh
 {
     "id": 1,
     "exam_name": "Exam 1",
-    "exam_startdate": null,
-    "exam_duration": null,
-    "examiner": null
+    "exam_startdate": "2021-05-27 02:25:33+02:00",
+    "exam_duration": 3.0,
+    "examiner": 2
 }
 ```
 
-# POST /exam/
+# POST /exam/{exam_id}/question/
 * General:
 - Returns exam list for the logged in examiner.
-* Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/{exam_id}/question/ -X POST -H "Content-Type: application/json" -d
+* Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/{exam_id}/question/ -X POST -H "Content-Type: application/json" -H "Content-Type: application/json"  "Authorization: Token <ACCESS_TOKEN>" -d
             '{
             "text": "how old are you now wrong ?",
             "mark": 100
@@ -127,10 +129,10 @@ python manage.py runserver
     "previous_question": null
 }
 ```
-# POST /exam/
+# POST /exam/question/{question_id}/answer/
 * General:
 - Returns exam list for the logged in examiner.
-* Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/question/{question_id}/answer/ -X POST -H "Content-Type: application/json" -d
+* Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/question/{question_id}/answer/ -X POST -H "Content-Type: application/json" -H "Content-Type: application/json"  "Authorization: Token <ACCESS_TOKEN>" -d
             '{
             "text":"15",
             "is_correct":true
@@ -142,5 +144,43 @@ python manage.py runserver
     "text": "15",
     "is_correct": true,
     "question": 6
+}
+```
+# POST /exam/question/{question_id}/answer/
+* General:
+- Returns exam list for the logged in examiner.
+* Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/1/start/ -X POST -H "Content-Type: application/json" -H "Content-Type: application/json"  "Authorization: Token <ACCESS_TOKEN>" -d ```
+```sh
+{
+    "exam_name": "Exam 1",
+    "exam_starttime": "2021-05-25T23:25:33Z",
+    "exam_duration": 3.0,
+    "questions": {
+        "how old are you ?": {
+            "mark": 4.5,
+            "previous_question": null,
+            "answers": {
+                "0": "6",
+                "1": "23"
+            }
+        },
+        "test?": {
+            "mark": 50.0,
+            "previous_question": null,
+            "answers": {
+                "0": "15"
+            }
+        },
+        "how old are you now wrong new?": {
+            "mark": 100.0,
+            "previous_question": null,
+            "answers": {}
+        },
+        "how old are you now wrong test new?": {
+            "mark": 100.0,
+            "previous_question": null,
+            "answers": {}
+        }
+    }
 }
 ```
