@@ -64,7 +64,7 @@ python manage.py runserver
 ```
 # POST /dj-rest-auth/login/
 * General:
-- Returns Token and user type.
+    - Returns Token and user type.
 * Return Sample: ``` curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/dj-rest-auth/login/ -X POST -H "Content-Type: application/json" -d
             '{
             "username": "omar",
@@ -80,7 +80,7 @@ python manage.py runserver
 ```
 # GET /exam/
 * General:
-- Returns exam list for the logged in examiner.
+    - Returns exam list for the logged in examiner.
 * Return Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/ -H "Content-Type: application/json"  "Authorization: Token <ACCESS_TOKEN>"```
 * Respons Sample:
 ```sh
@@ -96,7 +96,7 @@ python manage.py runserver
 ```
 # POST /exam/
 * General:
-- Returns exam data.
+    - Returns exam data.
 * Return Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/ -X POST -H "Content-Type: application/json"  "Authorization: Token <ACCESS_TOKEN>" -d
             '{
             "exam_name":"Exam 1",
@@ -117,7 +117,7 @@ python manage.py runserver
 
 # POST /exam/{exam_id}/question/
 * General:
-- Returns the question that has been added.
+    - Returns the question that has been added.
 * Return Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/{exam_id}/question/ -X POST -H "Content-Type: application/json" -H "Content-Type: application/json"  "Authorization: Token <ACCESS_TOKEN>" -d
             '{
             "text": "how old are you now wrong ?",
@@ -136,7 +136,7 @@ python manage.py runserver
 ```
 # POST /exam/question/{question_id}/answer/
 * General:
-- Returns the answer that has been added.
+    - Returns the answer that has been added.
 * Return Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/question/{question_id}/answer/ -X POST -H "Content-Type: application/json" -H "Content-Type: application/json"  "Authorization: Token <ACCESS_TOKEN>" -d
             '{
             "text":"15",
@@ -154,7 +154,7 @@ python manage.py runserver
 ```
 # POST /exam/1/start/
 * General:
-- Returns the whole exam for the student.
+    - Returns the whole exam for the student.
 * Return Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/1/start/ -X POST -H "Content-Type: application/json" -H "Content-Type: application/json"  "Authorization: Token <ACCESS_TOKEN>" -d ```
 * Respons Sample:
 ```sh
