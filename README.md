@@ -146,7 +146,7 @@ python manage.py runserver
     "question": 6
 }
 ```
-# POST /exam/question/{question_id}/answer/
+# POST /exam/1/start/
 * General:
 - Returns exam list for the logged in examiner.
 * Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/1/start/ -X POST -H "Content-Type: application/json" -H "Content-Type: application/json"  "Authorization: Token <ACCESS_TOKEN>" -d ```
