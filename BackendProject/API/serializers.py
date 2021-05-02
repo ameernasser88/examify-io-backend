@@ -5,10 +5,14 @@ from rest_framework.authtoken.models import Token
 from .models import Exam, Question, Answer
 
 class TokenSerializer(serializers.ModelSerializer):
-
+    user_type = serializers.SerializerMethodField('get_user_type')
+    def get_user_type(self, obj):
+        request = self.context.get('request', None)
+        if request:
+            return request.user.user_type
     class Meta:
         model = Token
-        fields = ('key', 'user')
+        fields = ('key', 'user_type')
 
 class ExamSerializer(serializers.ModelSerializer):
     
