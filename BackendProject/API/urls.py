@@ -1,10 +1,11 @@
 from django.urls import path , include
 from . import views
 from rest_framework.routers import DefaultRouter
-from . views import examiner, student
+from . views import examiner, student ,general
 from rest_framework.authtoken.views import obtain_auth_token
 
 urlpatterns = [
+    path('', general.index),
     path('dj-rest-auth/', include('dj_rest_auth.urls')),
     path('dj-rest-auth/registration/', include('dj_rest_auth.registration.urls')),
     path('exam/', examiner.ExamView.as_view()),
