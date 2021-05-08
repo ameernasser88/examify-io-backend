@@ -1,14 +1,10 @@
-from django.shortcuts import render
-from requests.models import to_key_val_list
-from rest_framework import serializers
-from rest_framework.authtoken.views import ObtainAuthToken
-from rest_framework.serializers import Serializer
+from django.contrib.auth import get_user_model
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
-from ..serializers import AnswerSerializer, ExamSerializer, QuestionSerializer
-from ..models import Exam, Examiner, Question
+from ..serializers import AllowedStudentSerializer, AnswerSerializer, ExamSerializer, QuestionSerializer
+from ..models import Exam, Examiner, Question, AllowedStudents, Student
 
 class ExamView(APIView):
     permission_classes = [IsAuthenticated]
@@ -25,7 +21,7 @@ class ExamView(APIView):
                 return Response(serializer.data,status= status.HTTP_201_CREATED)
             return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
         except Examiner.DoesNotExist:
-            return Response(status = status.HTTP_403_FORBIDDEN)
+            return Response(status = status.HTTP_404_NOT_FOUND)
     
     def get(self, request):
         try:
@@ -34,7 +30,7 @@ class ExamView(APIView):
             serializer = ExamSerializer(instance = exams, many = True)
             return Response(data= serializer.data, status= status.HTTP_200_OK)
         except Examiner.DoesNotExist:
-            return Response(status = status.HTTP_403_FORBIDDEN)
+            return Response(status = status.HTTP_404_NOT_FOUND)
 
 class QuestionView(APIView):
     permission_classes = [IsAuthenticated]
@@ -63,3 +59,42 @@ class AnswerView(APIView):
             else: 
                 return Response(status=status.HTTP_401_UNAUTHORIZED)
         return Response(serializer.errors, status= status.HTTP_400_BAD_REQUEST)
+
+class AllowedStudentsView(APIView):
+    permission_classes=[IsAuthenticated]
+    def post(self, request, id):
+        User = get_user_model()
+        usernames = request.data['students']
+        exam = Exam.objects.get(id=id)
+        data = {}
+        data['exam'] = exam.id
+        for username in usernames:
+            user = User.objects.get(username = username)
+            student = Student.objects.get(user = user)
+            data['student'] = student
+            serializer = AllowedStudentSerializer(data = data)
+
+            if serializer.is_valid():
+                serializer.save()
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.data,status=status.HTTP_201_CREATED)
+
+                
+        
+    def get(self, request, id):
+        try :
+            allowed_studnts = AllowedStudents.objects.filter(exam = id)
+            students_id = allowed_studnts.values('student')
+            students_name = []
+            exam = Exam.objects.get(id=id)
+            data = {}
+            User = get_user_model()
+            data['exam'] = exam.id
+            for student in students_id:
+                user = User.objects.get(pk = student.get('student')).username
+                students_name.append(user)
+            data['student'] = students_name            
+            return Response(data = data, status=status.HTTP_200_OK)
+        except AllowedStudents.DoesNotExist:
+            return Response(status = status.HTTP_404_NOT_FOUND)

@@ -1,8 +1,6 @@
 from django.urls import path , include
 from . import views
-from rest_framework.routers import DefaultRouter
 from . views import examiner, student ,general
-from rest_framework.authtoken.views import obtain_auth_token
 
 urlpatterns = [
     path('', general.index),
@@ -11,7 +9,8 @@ urlpatterns = [
     path('exam/', examiner.ExamView.as_view()),
     path('exam/<str:pk>/question/', examiner.QuestionView.as_view()),
     path('exam/question/<str:pk>/answer/', examiner.AnswerView.as_view()),
-    path('exam/<str:id>/start/', student.ExamView.as_view())
+    path('exam/<str:id>/start/', student.ExamView.as_view()),
+    path('exam/<str:id>/allowed-students/', examiner.AllowedStudentsView.as_view()),
 ]
 
 

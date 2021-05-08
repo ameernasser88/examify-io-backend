@@ -1,8 +1,6 @@
-from django.db.models import fields
-from django.db.models.fields import Field
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
-from .models import Exam, Question, Answer
+from .models import Exam, Question, Answer, AllowedStudents
 
 class TokenSerializer(serializers.ModelSerializer):
     user_type = serializers.SerializerMethodField('get_user_type')
@@ -30,3 +28,7 @@ class QuestionSerializer(serializers.ModelSerializer):
         model = Question
         fields = '__all__'
 
+class AllowedStudentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AllowedStudents
+        fields = '__all__'

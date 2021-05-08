@@ -46,7 +46,7 @@ python manage.py runserver
 # POST /dj-rest-auth/registration/
 * General:
     - Returns Token and user type.
-* Return Sample: ``` curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/dj-rest-auth/registration/ -X POST -H "Content-Type: application/json" -d
+* Request Sample: ``` curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/dj-rest-auth/registration/ -X POST -H "Content-Type: application/json" -d
             '{
                 "username": "omar",
                 "password1":"Aa123456789",
@@ -65,7 +65,7 @@ python manage.py runserver
 # POST /dj-rest-auth/login/
 * General:
     - Returns Token and user type.
-* Return Sample: ``` curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/dj-rest-auth/login/ -X POST -H "Content-Type: application/json" -d
+* Request Sample: ``` curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/dj-rest-auth/login/ -X POST -H "Content-Type: application/json" -d
             '{
             "username": "omar",
             "password":"Aa123456789"
@@ -81,7 +81,7 @@ python manage.py runserver
 # GET /exam/
 * General:
     - Returns exam list for the logged in examiner.
-* Return Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/ -H "Content-Type: application/json"  "Authorization: Token <ACCESS_TOKEN>"```
+* Request Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/ -H "Content-Type: application/json"  "Authorization: Token <ACCESS_TOKEN>"```
 * Respons Sample:
 ```sh
 {
@@ -97,7 +97,7 @@ python manage.py runserver
 # POST /exam/
 * General:
     - Returns exam data.
-* Return Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/ -X POST -H "Content-Type: application/json"  "Authorization: Token <ACCESS_TOKEN>" -d
+* Request Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/ -X POST -H "Content-Type: application/json"  "Authorization: Token <ACCESS_TOKEN>" -d
             '{
             "exam_name":"Exam 1",
             "exam_startdate":"2021-05-27 02:25:33+02:00",
@@ -118,7 +118,7 @@ python manage.py runserver
 # POST /exam/{exam_id}/question/
 * General:
     - Returns the question that has been added.
-* Return Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/{exam_id}/question/ -X POST -H "Content-Type: application/json" -H "Content-Type: application/json"  "Authorization: Token <ACCESS_TOKEN>" -d
+* Request Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/{exam_id}/question/ -X POST -H "Content-Type: application/json" -H "Content-Type: application/json"  "Authorization: Token <ACCESS_TOKEN>" -d
             '{
             "text": "how old are you now wrong ?",
             "mark": 100
@@ -137,7 +137,7 @@ python manage.py runserver
 # POST /exam/question/{question_id}/answer/
 * General:
     - Returns the answer that has been added.
-* Return Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/question/{question_id}/answer/ -X POST -H "Content-Type: application/json" -H "Content-Type: application/json"  "Authorization: Token <ACCESS_TOKEN>" -d
+* Request Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/question/{question_id}/answer/ -X POST -H "Content-Type: application/json" -H "Content-Type: application/json"  "Authorization: Token <ACCESS_TOKEN>" -d
             '{
             "text":"15",
             "is_correct":true
@@ -152,10 +152,10 @@ python manage.py runserver
     "question": 6
 }
 ```
-# POST /exam/1/start/
+# POST /exam/{exam_id}/start/
 * General:
     - Returns the whole exam for the student.
-* Return Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/1/start/ -X POST -H "Content-Type: application/json" -H "Content-Type: application/json"  "Authorization: Token <ACCESS_TOKEN>" -d ```
+* Request Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/{exam_id}/start/ -X POST -H "Content-Type: application/json" -H "Content-Type: application/json"  "Authorization: Token <ACCESS_TOKEN>" -d ```
 * Respons Sample:
 ```sh
 {
@@ -189,5 +189,42 @@ python manage.py runserver
             "answers": {}
         }
     }
+}
+```
+# POST exam/{exam_id}/allowed-students/
+* General:
+    - Returns list of students that has been added.
+* Request Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/{exam_id}/allowed-students/ -X POST -H "Content-Type: application/json" -H "Content-Type: application/json"  "Authorization: Token <ACCESS_TOKEN>" -d
+            '{
+                "student":["akl","ramzystudent"]
+            }' 
+        ```
+* Respons Sample:
+```sh
+{
+    "id": 2,
+    "student": [
+        10,
+        6
+    ],
+    "exam": 1
+}
+```
+# GET exam/{exam_id}/allowed-students/
+* General:
+    - Returns list of students allowed to enter the exam.
+* Request Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/{exam_id}/allowed-students/ -X POST -H "Content-Type: application/json" -H "Content-Type: application/json"  "Authorization: Token <ACCESS_TOKEN>" -d
+            '{
+                "student":["student1","student2"]
+            }' 
+        ```
+* Respons Sample:
+```sh
+    {
+    "exam": 1,
+    "student": [
+        "student1",
+        "student2"
+    ]
 }
 ```
