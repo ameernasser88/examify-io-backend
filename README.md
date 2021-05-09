@@ -48,10 +48,10 @@ python manage.py runserver
     - Returns Token and user type.
 * Request Sample: ``` curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/dj-rest-auth/registration/ -X POST -H "Content-Type: application/json" -d
             '{
-                "username": "omar",
+                "username": "name",
                 "password1":"Aa123456789",
                 "password2":"Aa123456789",
-                "email":"omar@gmail.com",
+                "email":"name@gmail.com",
                 "user_type":"1"
                 }' 
             ```
@@ -67,7 +67,7 @@ python manage.py runserver
     - Returns Token and user type.
 * Request Sample: ``` curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/dj-rest-auth/login/ -X POST -H "Content-Type: application/json" -d
             '{
-            "username": "omar",
+            "username": "name",
             "password":"Aa123456789"
             }' 
             ```
@@ -152,41 +152,29 @@ python manage.py runserver
     "question": 6
 }
 ```
-# POST /exam/{exam_id}/start/
+# GET /exam/{exam_id}/start/
 * General:
     - Returns the whole exam for the student.
-* Request Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/{exam_id}/start/ -X POST -H "Content-Type: application/json" -H "Content-Type: application/json"  "Authorization: Token <ACCESS_TOKEN>" -d ```
+* Request Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/{exam_id}/start/ -H "Authorization: Token <ACCESS_TOKEN>" -d ```
 * Respons Sample:
 ```sh
 {
-    "exam_name": "Exam 1",
-    "exam_starttime": "2021-05-25T23:25:33Z",
-    "exam_duration": 3.0,
+    "exam_name": "Exam test",
+    "exam_starttime": "2021-05-09T20:47:36Z",
+    "exam_duration": 4.0,
     "questions": {
-        "how old are you ?": {
-            "mark": 4.5,
-            "previous_question": null,
-            "answers": {
-                "0": "6",
-                "1": "23"
-            }
-        },
-        "test?": {
-            "mark": 50.0,
-            "previous_question": null,
-            "answers": {
-                "0": "15"
-            }
-        },
-        "how old are you now wrong new?": {
-            "mark": 100.0,
+        "how old are you now wrong ?": {
+            "mark": 1.0,
             "previous_question": null,
             "answers": {}
         },
-        "how old are you now wrong test new?": {
-            "mark": 100.0,
+        "how old are you now wrong 2?": {
+            "mark": 1.0,
             "previous_question": null,
-            "answers": {}
+            "answers": {
+                "10": "answer 1",
+                "11": "answer 2"
+            }
         }
     }
 }
@@ -196,7 +184,7 @@ python manage.py runserver
     - Returns list of students that has been added.
 * Request Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/{exam_id}/allowed-students/ -X POST -H "Content-Type: application/json" -H "Content-Type: application/json"  "Authorization: Token <ACCESS_TOKEN>" -d
             '{
-                "student":["akl","ramzystudent"]
+                "student":["student1","student2"]
             }' 
         ```
 * Respons Sample:
