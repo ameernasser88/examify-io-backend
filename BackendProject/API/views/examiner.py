@@ -39,8 +39,6 @@ class QuestionView(APIView):
         serializer = QuestionSerializer(data = request.data)
         if serializer.is_valid():
             if request.user.id == exam.examiner.pk:
-                print(request.user)
-                print(exam.examiner)
                 serializer.save(exam = exam)
                 return Response(data = serializer.data, status=status.HTTP_201_CREATED)
             else :
