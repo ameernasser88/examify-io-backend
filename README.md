@@ -179,6 +179,27 @@ python manage.py runserver
     }
 }
 ```
+# POST /exam/{exam_id}/submit/
+* General:
+    - Submits all exam answers for the student.
+* Request Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/{exam_id}/submit/ -X POST -H "Content-Type: application/json" -H "Content-Type: application/json"  "Authorization: Token <ACCESS_TOKEN>" -d
+            '{
+    "student_answers":
+    {
+        "18" : 12, 
+        "19":17,
+        "20" : 20, 
+        "21":24,
+        "22":29
+    }
+}
+
+where question id and 12 is chosen answer id' 
+        ```
+* Respons Sample:
+```sh
+HTTP 200 OK
+```
 # POST exam/{exam_id}/allowed-students/
 * General:
     - Returns list of students that has been added.
