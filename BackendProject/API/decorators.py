@@ -1,12 +1,13 @@
 from rest_framework.response import Response
 from rest_framework import status
+from django.http import JsonResponse
 
 def students_only(view_func):
     def wrapper_func(request, *args, **kwargs):
         if request.user.user_type == "1":
             return view_func(request, *args, **kwargs)
         else:
-            return Response(status=status.HTTP_403_FORBIDDEN)
+            return JsonResponse({'error':'only students allowed'}, status=403)
     return wrapper_func
 
 
@@ -15,5 +16,5 @@ def examiners_only(view_func):
         if request.user.user_type == "2":
             return view_func(request, *args, **kwargs)
         else:
-            return Response(status=status.HTTP_403_FORBIDDEN)
+            return JsonResponse({'error':'only examiners allowed'} ,status=403)
     return wrapper_func
