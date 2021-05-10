@@ -188,7 +188,7 @@ python manage.py runserver
     ]
 }
 ```
-# GET /exam/{exam_id}/marks/
+#### GET /exam/{exam_id}/marks/
 * General:
     - Returns list of students marks in exam.
 * Request Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/{exam_id}/marks/ -H "Content-Type: application/json" "Authorization: Token <ACCESS_TOKEN>"
@@ -208,7 +208,7 @@ python manage.py runserver
     }
 ]
 ```
-# GET /exam/{exam_id}/student/{student_id}/
+#### GET /exam/{exam_id}/student/{student_id}/
 * General:
     - Returns the exam of the student.
 * Request Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/{exam_id}/student/{student_id}/  -H "Content-Type: application/json" "Authorization: Token <ACCESS_TOKEN>"
