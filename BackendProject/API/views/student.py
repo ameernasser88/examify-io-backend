@@ -1,12 +1,14 @@
-from ..models import AllowedStudents, Answer, ErrorMessages, Exam, Question, Student
+from django.utils.decorators import method_decorator
+from ..models import *
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from datetime import timedelta
 from django.utils import timezone
+from ..decorators import *
 
-
+@method_decorator(students_only, name='dispatch')
 class ExamView(APIView):
     permission_classes = [IsAuthenticated]
     def get(self, request, id):

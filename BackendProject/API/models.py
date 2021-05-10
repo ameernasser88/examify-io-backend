@@ -93,7 +93,7 @@ class AllowedStudents(models.Model):
     student = ForeignKey(Student, on_delete=models.CASCADE)
     exam = ForeignKey(Exam, on_delete=models.CASCADE)
     def __str__(self):
-        return str(self.exam)
+        return str(self.exam) + " " + str(self.student)
 
 class ErrorMessages(models.Model):
     error_message = models.TextField()

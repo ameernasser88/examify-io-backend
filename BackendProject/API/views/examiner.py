@@ -1,11 +1,14 @@
 from django.contrib.auth import get_user_model
+from django.utils.decorators import method_decorator
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from ..serializers import AllowedStudentSerializer, AnswerSerializer, ExamSerializer, QuestionSerializer
-from ..models import Exam, Examiner, Question, AllowedStudents, Student
+from ..models import *
+from ..decorators import *
 
+@method_decorator(examiners_only, name='dispatch')
 class ExamView(APIView):
     permission_classes = [IsAuthenticated]
     def post(self, request):
@@ -32,6 +35,7 @@ class ExamView(APIView):
         except Examiner.DoesNotExist:
             return Response(status = status.HTTP_404_NOT_FOUND)
 
+@method_decorator(examiners_only, name='dispatch')
 class QuestionView(APIView):
     permission_classes = [IsAuthenticated]
     def post(self, request, pk):
@@ -45,6 +49,7 @@ class QuestionView(APIView):
                 return Response(status=status.HTTP_401_UNAUTHORIZED)
         return Response(serializer.errors, status= status.HTTP_400_BAD_REQUEST)
 
+@method_decorator(examiners_only, name='dispatch')
 class AnswerView(APIView):
     permission_classes = [IsAuthenticated]
     def post(self, request, pk):
@@ -58,6 +63,7 @@ class AnswerView(APIView):
                 return Response(status=status.HTTP_401_UNAUTHORIZED)
         return Response(serializer.errors, status= status.HTTP_400_BAD_REQUEST)
 
+@method_decorator(examiners_only, name='dispatch')
 class AllowedStudentsView(APIView):
     permission_classes=[IsAuthenticated]
     def post(self, request, id):
