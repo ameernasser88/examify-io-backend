@@ -44,8 +44,36 @@ class ExamView(APIView):
         return Response(status=status.HTTP_200_OK,data = exam_info)
 
 
+class SubmitExam(APIView):
+    permission_classes = [IsAuthenticated]
+    def post(self, request, id):
+        user = request.user
+        student = Student.objects.get(user=user)
+        exam = Exam.objects.get(id=id)
+        if (student is None) or (exam is None):
+            return Response(status = status.HTTP_404_NOT_FOUND)
 
-
+        student_answers = request.data['student_answers']
+        try:
+            total_mark = 0
+            for question_id, answer_id in student_answers.items():
+                question_id = int(question_id)
+                answer = Answer.objects.get(id=answer_id)
+                question = Question.objects.get(id=question_id)
+                student_answer = StudentAnswer(
+                    student=student,
+                    exam = exam,
+                    answer = answer,
+                    question = question
+                )
+                student_answer.save()
+                if answer.is_correct:
+                    total_mark = total_mark + question.mark
+            exam_result = ExamResults(student=student,exam=exam,mark=total_mark)
+            exam_result.save()
+            return Response(status = status.HTTP_200_OK)
+        except:
+            return Response(status = status.HTTP_404_NOT_FOUND)
 
 
 

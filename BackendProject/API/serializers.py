@@ -1,13 +1,16 @@
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
-from .models import Exam, Question, Answer, AllowedStudents
+from .models import *
 
 class TokenSerializer(serializers.ModelSerializer):
     user_type = serializers.SerializerMethodField('get_user_type')
     def get_user_type(self, obj):
         request = self.context.get('request', None)
-        if request:
+        if request.user.is_anonymous:
+            return "1"
+        else:
             return request.user.user_type
+
     class Meta:
         model = Token
         fields = ('key', 'user_type')
@@ -32,3 +35,5 @@ class AllowedStudentSerializer(serializers.ModelSerializer):
     class Meta:
         model = AllowedStudents
         fields = '__all__'
+
+

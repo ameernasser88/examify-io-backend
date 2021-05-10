@@ -9,8 +9,9 @@ urlpatterns = [
     path('exam/', examiner.ExamView.as_view()),
     path('exam/<str:pk>/question/', examiner.QuestionView.as_view()),
     path('exam/question/<str:pk>/answer/', examiner.AnswerView.as_view()),
-    path('exam/<str:id>/start/', student.ExamView.as_view()),
     path('exam/<str:id>/allowed-students/', examiner.AllowedStudentsView.as_view()),
+    path('exam/<str:id>/start/', student.ExamView.as_view()),
+    path('exam/<str:id>/submit/', student.SubmitExam.as_view()),
 ]
 
 
