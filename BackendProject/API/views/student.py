@@ -16,36 +16,38 @@ class ExamView(APIView):
             exam = Exam.objects.get(id = id)
         except Exam.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
+
         exam_endtime = exam.exam_startdate + timedelta(hours = exam.exam_duration)
         allowed_students = AllowedStudents.objects.filter(exam = exam)
-        if allowed_students.filter(student = request.user.pk):
-            if timezone.now() >= exam.exam_startdate :
-                if timezone.now() < exam_endtime:
-                    exam_info = {'exam_name':exam.exam_name,'exam_starttime':exam.exam_startdate, 'exam_duration':exam.exam_duration, 'questions':{}}
-                    questions = Question.objects.filter(exam = exam)
-                    exam_questions = {}
-                    for question in questions:
-                        exam_questions[question.text] = {'mark': question.mark, 'previous_question':question.previous_question,'answers':{}}
-                        exam_answers = {}
-                        answers = Answer.objects.filter(question = question)
-                        for answer in answers:
-                            exam_answers[answer.id] = answer.text
-                        exam_questions[question.text]['answers'] = exam_answers
-                        exam_info['questions'] = exam_questions
-                    return Response(status=status.HTTP_200_OK,data = exam_info)
-                else:
-                    error = {}
-                    error['error'] = ErrorMessages.objects.get(id = 2).error_message
-                    return Response(data = error,status=status.HTTP_401_UNAUTHORIZED)
-            else:
-                error = {}
-                error['error'] = ErrorMessages.objects.get(id = 3).error_message
-                return Response(data = error,status=status.HTTP_401_UNAUTHORIZED)
-        else:
-            error = {}
+        error = {}
+        if not allowed_students.filter(student = request.user.pk):
             error['error'] = ErrorMessages.objects.get(id = 1).error_message
             return Response(data = error, status=status.HTTP_401_UNAUTHORIZED )
-        
+        if not timezone.now() >= exam.exam_startdate :
+            error['error'] = ErrorMessages.objects.get(id = 3).error_message
+            return Response(data = error,status=status.HTTP_401_UNAUTHORIZED)
+        if not timezone.now() < exam_endtime:
+            error['error'] = ErrorMessages.objects.get(id = 2).error_message
+            return Response(data = error,status=status.HTTP_401_UNAUTHORIZED)
+
+        exam_info = {'exam_name':exam.exam_name,'exam_starttime':exam.exam_startdate, 'exam_duration':exam.exam_duration, 'questions':{}}
+        questions = Question.objects.filter(exam = exam)
+        exam_questions = {}
+        for question in questions:
+            exam_questions[question.text] = {'mark': question.mark, 'previous_question':question.previous_question,'answers':{}}
+            exam_answers = {}
+            answers = Answer.objects.filter(question = question)
+            for answer in answers:
+                exam_answers[answer.id] = answer.text
+            exam_questions[question.text]['answers'] = exam_answers
+            exam_info['questions'] = exam_questions
+        return Response(status=status.HTTP_200_OK,data = exam_info)
+
+
+
+
+
+
 
 
 
