@@ -44,7 +44,7 @@ class ExamView(APIView):
             exam_info['questions'] = exam_questions
         return Response(status=status.HTTP_200_OK,data = exam_info)
 
-
+@method_decorator(students_only, name='dispatch')
 class SubmitExam(APIView):
     permission_classes = [IsAuthenticated]
     def post(self, request, id):

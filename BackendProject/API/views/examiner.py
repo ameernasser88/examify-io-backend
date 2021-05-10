@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
-from ..serializers import AllowedStudentSerializer, AnswerSerializer, ExamSerializer, QuestionSerializer
+from ..serializers import AllowedStudentSerializer, AnswerSerializer, ExamResultSerializer, ExamSerializer, QuestionSerializer, StudentAnswerSerializer
 from ..models import *
 from ..decorators import *
 
@@ -63,6 +63,7 @@ class AnswerView(APIView):
                 return Response(status=status.HTTP_401_UNAUTHORIZED)
         return Response(serializer.errors, status= status.HTTP_400_BAD_REQUEST)
 
+
 @method_decorator(examiners_only, name='dispatch')
 class AllowedStudentsView(APIView):
     permission_classes=[IsAuthenticated]
@@ -102,3 +103,27 @@ class AllowedStudentsView(APIView):
             return Response(data = data, status=status.HTTP_200_OK)
         except AllowedStudents.DoesNotExist:
             return Response(status = status.HTTP_404_NOT_FOUND)
+
+@method_decorator(examiners_only, name='dispatch')
+class StudentMarksView(APIView):
+    permission_classes=[IsAuthenticated]
+    def get(self, request, id):
+        try:
+            exam = ExamResults.objects.filter(exam = id)
+            serializer = ExamResultSerializer(instance = exam, many = True)
+            
+            return Response(data = serializer.data,status=status.HTTP_200_OK )
+        except ExamResults.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+@method_decorator(examiners_only, name='dispatch')
+class StudentAnswerView(APIView):
+    permission_classes=[IsAuthenticated]
+    def get(self, request, id, st):
+        try:
+            student_answer = StudentAnswer.objects.filter(exam = id, student =  st)
+            serializer = StudentAnswerSerializer(instance=student_answer, many=True)
+            return Response(data = serializer.data, status= status.HTTP_202_ACCEPTED)
+        except StudentAnswer.DoesNotExist:
+            return Response(status.HTTP_404_NOT_FOUND)
+        

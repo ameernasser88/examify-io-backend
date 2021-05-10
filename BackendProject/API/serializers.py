@@ -1,3 +1,4 @@
+from django.db.models import fields
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
 from .models import *
@@ -7,7 +8,7 @@ class TokenSerializer(serializers.ModelSerializer):
     def get_user_type(self, obj):
         request = self.context.get('request', None)
         if request.user.is_anonymous:
-            return "1"
+            return None
         else:
             return request.user.user_type
 
@@ -36,4 +37,52 @@ class AllowedStudentSerializer(serializers.ModelSerializer):
         model = AllowedStudents
         fields = '__all__'
 
+class StudentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Student
+        fields = ('username')
 
+
+class ExamResultSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = ExamResults
+        fields = ('student', 'student_name', 'mark')
+
+    student_name = serializers.SerializerMethodField('get_student_name')
+    def get_student_name(self, obj):
+        user = User.objects.get(pk = obj.student.pk)
+        return user.username
+
+class StudentAnswerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = StudentAnswer
+        fields = ('student_name', 'student','exam', 'exam_name', 'question', 'question_text', 'answer', 'answer_text', 'is_correct')
+
+    exam_name = serializers.SerializerMethodField('get_exam_name')
+    student_name = serializers.SerializerMethodField('get_student_name')
+    question_text = serializers.SerializerMethodField('get_question_text')
+    answer_text = serializers.SerializerMethodField('get_answer_text')
+    is_correct = serializers.SerializerMethodField('is_answer_correct')
+
+
+    def get_exam_name(self, obj):
+        exam = Exam.objects.get(id = obj.exam.id)
+        return exam.exam_name
+
+    def get_student_name(self, obj):
+        user = User.objects.get(pk = obj.student.pk)
+        return user.username
+
+    
+    def get_question_text(self, obj):
+        question = Question.objects.get(id = obj.exam.id)
+        return question.text
+
+    def get_answer_text(self, obj):
+        answer = Answer.objects.get(id = obj.answer.id)
+        return answer.text
+
+    def is_answer_correct(self, obj):
+        answer = Answer.objects.get(id = obj.answer.id)
+        return answer.is_correct
