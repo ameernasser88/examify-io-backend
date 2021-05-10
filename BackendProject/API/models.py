@@ -78,7 +78,7 @@ class StudentAnswer(models.Model):
     answer = models.ForeignKey(Answer, on_delete=models.CASCADE)
 
     def __str__(self) -> str:
-        return "Student : " +str(self.student) + "Exam : " + str(self.exam) + "Question : " + str(self.question.id)
+        return "Student : " +str(self.student) + " Exam : " + str(self.exam) + "Question : " + str(self.question.text)
 
 class ExamResults(models.Model):
     student = models.ForeignKey(Student,on_delete=models.CASCADE)
@@ -86,7 +86,7 @@ class ExamResults(models.Model):
     mark = models.FloatField()
 
     def __str__(self) -> str:
-        return "Student : " +str(self.student) + "Exam : " + str(self.exam)
+        return "Student : " +str(self.student) + " Exam : " + str(self.exam) + " Mark : " + str(self.mark)
 
 
 class AllowedStudents(models.Model):
