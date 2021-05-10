@@ -1,3 +1,4 @@
+import math
 from django.utils.decorators import method_decorator
 from ..models import *
 from rest_framework.views import APIView
@@ -16,8 +17,8 @@ class ExamView(APIView):
             exam = Exam.objects.get(id = id)
         except Exam.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
-
-        exam_endtime = exam.exam_startdate + timedelta(hours = exam.exam_duration)
+        mins,hrs = math.modf(exam.exam_duration)
+        exam_endtime = exam.exam_startdate + timedelta(hours = hrs, minutes=mins*60)
         allowed_students = AllowedStudents.objects.filter(exam = exam)
         error = {}
         if not allowed_students.filter(student = request.user.pk):
