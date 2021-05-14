@@ -80,22 +80,6 @@ python manage.py runserver
 }
 ```
 ## For Examiner:
-#### GET /exam/
-* General:
-    - Returns exam list for the logged in examiner.
-* Request Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/ -H "Content-Type: application/json"  "Authorization: Token <ACCESS_TOKEN>"```
-* Respons Sample:
-```sh
-{
-    {
-        "id": 1,
-        "exam_name": "Exam 1",
-        "exam_startdate": "2021-05-25T14:52:37Z",
-        "exam_duration": 3.0,
-        "examiner": 2
-    }
-}
-```
 #### POST /exam/
 * General:
     - Returns exam data.
@@ -114,6 +98,22 @@ python manage.py runserver
     "exam_startdate": "2021-05-27 02:25:33+02:00",
     "exam_duration": 3.0,
     "examiner": 2
+}
+```
+#### GET /exam/
+* General:
+    - Returns exam list for the logged in examiner.
+* Request Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/ -H "Content-Type: application/json"  "Authorization: Token <ACCESS_TOKEN>"```
+* Respons Sample:
+```sh
+{
+    {
+        "id": 1,
+        "exam_name": "Exam 1",
+        "exam_startdate": "2021-05-25T14:52:37Z",
+        "exam_duration": 3.0,
+        "examiner": 2
+    }
 }
 ```
 
