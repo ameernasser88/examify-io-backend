@@ -49,12 +49,12 @@ class Answer(models.Model):
         qans = str(self.question)+str(self.text)
         return str(qans)
 class Exam(models.Model):
-    examiner = models.ForeignKey(Examiner,default=None, on_delete=models.CASCADE)
+    examiner = models.ForeignKey(Examiner,blank=False ,null=False, on_delete=models.CASCADE)
     # TO DO
     # Exam info
-    exam_name = models.CharField(max_length=255, default='None')
-    exam_startdate = models.DateTimeField(null=True)
-    exam_duration = models.FloatField(null=True)
+    exam_name = models.CharField(max_length=255, null=False,blank=False)
+    exam_startdate = models.DateTimeField(null=False,blank=False)
+    exam_duration = models.FloatField(null=False,blank=False)
    # attendance = models.ManyToManyField(Student, related_name='attendance') 
    # students = models.ManyToManyField(Student, related_name='allowed_students')
     def __str__(self) -> str:
