@@ -29,7 +29,8 @@ ALLOWED_HOSTS = ['*']
 CORS_ALLOWED_ORIGINS = [
     "https://examify.vercel.app",
     "https://localhost:3000",
-    "https://localhost"]
+    "https://localhost",
+    "https://examify-cors-proxy.herokuapp.com/"]
 #CORS_ALLOWED_ORIGINS = []
 # CORS_ORIGIN_ALLOW_ALL = True
 
