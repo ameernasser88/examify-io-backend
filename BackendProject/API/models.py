@@ -1,3 +1,4 @@
+from typing import Callable
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.db.models.deletion import CASCADE, SET_NULL
@@ -92,8 +93,9 @@ class ExamResults(models.Model):
 class AllowedStudents(models.Model):
     student = ForeignKey(Student, on_delete=models.CASCADE)
     exam = ForeignKey(Exam, on_delete=models.CASCADE)
+    supervisor = models.ForeignKey(Supervisor,on_delete=models.SET_NULL,null = True, default=None)
     def __str__(self):
-        return str(self.exam) + " " + str(self.student)
+        return str(self.exam) + " " + str(self.student) + " "+ str(self.supervisor)
 
 class ErrorMessages(models.Model):
     error_message = models.TextField()

@@ -35,13 +35,17 @@ class QuestionSerializer(serializers.ModelSerializer):
 class AllowedStudentSerializer(serializers.ModelSerializer):
     class Meta:
         model = AllowedStudents
-        fields = '__all__'
+        fields = ('student','exam')
 
 class StudentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Student
         fields = ('username')
 
+class SupervisorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Supervisor
+        fields = ('username')
 
 class ExamResultSerializer(serializers.ModelSerializer):
     
