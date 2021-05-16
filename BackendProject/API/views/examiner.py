@@ -7,10 +7,21 @@ from rest_framework import status
 from ..serializers import AllowedStudentSerializer, AnswerSerializer, ExamResultSerializer, ExamSerializer, QuestionSerializer, StudentAnswerSerializer
 from ..models import *
 from ..decorators import *
+from rest_framework.throttling import UserRateThrottle
 
-@method_decorator(examiners_only, name='dispatch')
+class UserMinThrottle(UserRateThrottle):
+    scope = 'user_min'
+
+class UserDayThrottle(UserRateThrottle):
+    scope = 'user_day'
+
+#@method_decorator(examiners_only, name='dispatch')
 class ExamView(APIView):
     permission_classes = [IsAuthenticated]
+    throttle_classes= [
+        UserMinThrottle,
+        UserDayThrottle
+    ]
     def post(self, request):
         try:
             user = Examiner.objects.get(user = request.user)
@@ -35,9 +46,13 @@ class ExamView(APIView):
         except Examiner.DoesNotExist:
             return Response(status = status.HTTP_404_NOT_FOUND)
 
-@method_decorator(examiners_only, name='dispatch')
+#@method_decorator(examiners_only, name='dispatch')
 class QuestionView(APIView):
     permission_classes = [IsAuthenticated]
+    throttle_classes= [
+        UserMinThrottle,
+        UserDayThrottle
+    ]
     def post(self, request, pk):
         exam = Exam.objects.get(id = pk)
         serializer = QuestionSerializer(data = request.data)
@@ -49,9 +64,13 @@ class QuestionView(APIView):
                 return Response(status=status.HTTP_401_UNAUTHORIZED)
         return Response(serializer.errors, status= status.HTTP_400_BAD_REQUEST)
 
-@method_decorator(examiners_only, name='dispatch')
+#@method_decorator(examiners_only, name='dispatch')
 class AnswerView(APIView):
     permission_classes = [IsAuthenticated]
+    throttle_classes= [
+        UserMinThrottle,
+        UserDayThrottle
+    ]
     def post(self, request, pk):
         question = Question.objects.get(id = pk)
         serializer = AnswerSerializer(data=request.data)
@@ -64,8 +83,12 @@ class AnswerView(APIView):
         return Response(serializer.errors, status= status.HTTP_400_BAD_REQUEST)
 
 
-@method_decorator(examiners_only, name='dispatch')
+#@method_decorator(examiners_only, name='dispatch')
 class AllowedStudentsView(APIView):
+    throttle_classes= [
+        UserMinThrottle,
+        UserDayThrottle
+    ]
     permission_classes=[IsAuthenticated]
     def post(self, request, id):
         User = get_user_model()
@@ -104,8 +127,12 @@ class AllowedStudentsView(APIView):
         except AllowedStudents.DoesNotExist:
             return Response(status = status.HTTP_404_NOT_FOUND)
 
-@method_decorator(examiners_only, name='dispatch')
+#@method_decorator(examiners_only, name='dispatch')
 class StudentMarksView(APIView):
+    throttle_classes= [
+        UserMinThrottle,
+        UserDayThrottle
+    ]
     permission_classes=[IsAuthenticated]
     def get(self, request, id):
         try:
@@ -116,8 +143,12 @@ class StudentMarksView(APIView):
         except ExamResults.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
-@method_decorator(examiners_only, name='dispatch')
+#@method_decorator(examiners_only, name='dispatch')
 class StudentAnswerView(APIView):
+    throttle_classes= [
+        UserMinThrottle,
+        UserDayThrottle
+    ]
     permission_classes=[IsAuthenticated]
     def get(self, request, id, st):
         try:
