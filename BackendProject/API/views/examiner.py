@@ -9,11 +9,11 @@ from ..models import *
 from ..decorators import *
 from rest_framework.throttling import UserRateThrottle
 
-class UserMinThrottle(UserRateThrottle):
-    scope = 'user_min'
+# class UserMinThrottle(UserRateThrottle):
+#     scope = 'user_min'
 
-class UserDayThrottle(UserRateThrottle):
-    scope = 'user_day'
+# class UserDayThrottle(UserRateThrottle):
+#     scope = 'user_day'
 
 #@method_decorator(examiners_only, name='dispatch')
 class ExamView(APIView):

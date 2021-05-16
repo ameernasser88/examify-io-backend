@@ -163,15 +163,15 @@ REST_FRAMEWORK = {
         'rest_framework.renderers.JSONRenderer',
     ),
 
-    'DEFAULT_THROTTLE_CLASSES': (
-        'rest_framework.throttling.AnonRateThrottle',
-        'rest_framework.throttling.UserRateThrottle'
-    ),
-    'DEFAULT_THROTTLE_RATES': {
-        'anon': '100/day',
-        'user_min': '500/minute',
-        'user_day': '3000/day',
-    }
+    # 'DEFAULT_THROTTLE_CLASSES': (
+    #     'rest_framework.throttling.AnonRateThrottle',
+    #     'rest_framework.throttling.UserRateThrottle'
+    # ),
+    # 'DEFAULT_THROTTLE_RATES': {
+    #     'anon': '100/day',
+    #     'user_min': '500/minute',
+    #     'user_day': '3000/day',
+    # }
 }
 
 REST_AUTH_SERIALIZERS = {
