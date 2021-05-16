@@ -18,10 +18,10 @@ class UserDayThrottle(UserRateThrottle):
 #@method_decorator(examiners_only, name='dispatch')
 class ExamView(APIView):
     permission_classes = [IsAuthenticated]
-    throttle_classes= [
-        UserMinThrottle,
-        UserDayThrottle
-    ]
+    # throttle_classes= [
+    #     UserMinThrottle,
+    #     UserDayThrottle
+    # ]
     def post(self, request):
         try:
             user = Examiner.objects.get(user = request.user)
@@ -49,10 +49,10 @@ class ExamView(APIView):
 #@method_decorator(examiners_only, name='dispatch')
 class QuestionView(APIView):
     permission_classes = [IsAuthenticated]
-    throttle_classes= [
-        UserMinThrottle,
-        UserDayThrottle
-    ]
+    # throttle_classes= [
+    #     UserMinThrottle,
+    #     UserDayThrottle
+    # ]
     def post(self, request, pk):
         exam = Exam.objects.get(id = pk)
         serializer = QuestionSerializer(data = request.data)
@@ -67,10 +67,10 @@ class QuestionView(APIView):
 #@method_decorator(examiners_only, name='dispatch')
 class AnswerView(APIView):
     permission_classes = [IsAuthenticated]
-    throttle_classes= [
-        UserMinThrottle,
-        UserDayThrottle
-    ]
+    # throttle_classes= [
+    #     UserMinThrottle,
+    #     UserDayThrottle
+    # ]
     def post(self, request, pk):
         question = Question.objects.get(id = pk)
         serializer = AnswerSerializer(data=request.data)
@@ -85,10 +85,10 @@ class AnswerView(APIView):
 
 #@method_decorator(examiners_only, name='dispatch')
 class AllowedStudentsView(APIView):
-    throttle_classes= [
-        UserMinThrottle,
-        UserDayThrottle
-    ]
+    # throttle_classes= [
+    #     UserMinThrottle,
+    #     UserDayThrottle
+    # ]
     permission_classes=[IsAuthenticated]
     def post(self, request, id):
         User = get_user_model()
@@ -129,10 +129,10 @@ class AllowedStudentsView(APIView):
 
 #@method_decorator(examiners_only, name='dispatch')
 class StudentMarksView(APIView):
-    throttle_classes= [
-        UserMinThrottle,
-        UserDayThrottle
-    ]
+    # throttle_classes= [
+    #     UserMinThrottle,
+    #     UserDayThrottle
+    # ]
     permission_classes=[IsAuthenticated]
     def get(self, request, id):
         try:
@@ -145,10 +145,10 @@ class StudentMarksView(APIView):
 
 #@method_decorator(examiners_only, name='dispatch')
 class StudentAnswerView(APIView):
-    throttle_classes= [
-        UserMinThrottle,
-        UserDayThrottle
-    ]
+    # throttle_classes= [
+    #     UserMinThrottle,
+    #     UserDayThrottle
+    # ]
     permission_classes=[IsAuthenticated]
     def get(self, request, id, st):
         try:
