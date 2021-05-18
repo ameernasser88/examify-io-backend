@@ -7,6 +7,7 @@ urlpatterns = [
     path('dj-rest-auth/', include('dj_rest_auth.urls')),
     path('dj-rest-auth/registration/', include('dj_rest_auth.registration.urls')),
     path('exam/', examiner.ExamView.as_view()),
+    path('exam/<str:id>/', examiner.SingleExamView.as_view()),
     path('exam/<str:pk>/question/', examiner.QuestionView.as_view()),
     path('exam/question/<str:pk>/answer/', examiner.AnswerView.as_view()),
     path('exam/<str:id>/allowed-students/', examiner.AllowedStudentsView.as_view()),

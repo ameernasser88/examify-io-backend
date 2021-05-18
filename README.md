@@ -116,7 +116,174 @@ python manage.py runserver
     }
 }
 ```
-
+#### GET /exam/{exam_id}/
+* General:
+    - Returns a whole exam.
+* Request Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/{exam_id}/ -H "Content-Type: application/json"  "Authorization: Token <ACCESS_TOKEN>"```
+* Respons Sample:
+```sh
+{
+    "id": 13,
+    "exam": "Movies",
+    "startdate": "2021-05-25T14:52:37Z",
+    "duration": 3.0,
+    "questions": [
+        {
+            "id": 18,
+            "text": "what was tom hank's name in you've got mail ?",
+            "mark": 10.0,
+            "answers": {
+                "12": {
+                    "text": "Joe Fox",
+                    "is_correct": true
+                },
+                "13": {
+                    "text": "Joe Tom",
+                    "is_correct": false
+                },
+                "14": {
+                    "text": "Jack Tom",
+                    "is_correct": false
+                },
+                "15": {
+                    "text": "Jack Daniels",
+                    "is_correct": false
+                }
+            }
+        },
+        {
+            "id": 19,
+            "text": "what was Sophie Turner's name in game of thrones ?",
+            "mark": 10.0,
+            "answers": {
+                "16": {
+                    "text": "Sansa Snow",
+                    "is_correct": false
+                },
+                "17": {
+                    "text": "Sansa Stark",
+                    "is_correct": true
+                },
+                "18": {
+                    "text": "Sansa Greyhound",
+                    "is_correct": false
+                },
+                "19": {
+                    "text": "Sansa Sand",
+                    "is_correct": false
+                }
+            }
+        },
+        {
+            "id": 20,
+            "text": "what was Tom Hank's name in cast away ?",
+            "mark": 10.0,
+            "answers": {
+                "20": {
+                    "text": "Chuck Noland",
+                    "is_correct": true
+                },
+                "21": {
+                    "text": "Chuck Neil",
+                    "is_correct": false
+                },
+                "22": {
+                    "text": "Charles Neil",
+                    "is_correct": false
+                },
+                "23": {
+                    "text": "Charl Neil",
+                    "is_correct": false
+                }
+            }
+        }
+    ]
+}
+```
+#### PATCH /exam/{exam_id}/
+* General:
+    - Returns a whole exam.
+* Request Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/{exam_id}/ -X PATCH -H "Content-Type: application/json"  "Authorization: Token <ACCESS_TOKEN>"
+'{
+    "id": 13,
+    "exam": "Movies",
+    "startdate": "2021-05-25T14:52:37Z",
+    "duration": 3.0,
+    "questions": [
+        {
+            "id": 18,
+            "text": "what was tom hank's name in you've got mail ?",
+            "mark": 10.0,
+            "answers": {
+                "12": {
+                    "text": "Joe Fox",
+                    "is_correct": true
+                },
+                "13": {
+                    "text": "Joe Tom",
+                    "is_correct": false
+                },
+                "14": {
+                    "text": "Jack Tom",
+                    "is_correct": false
+                },
+                "15": {
+                    "text": "Jack Daniels",
+                    "is_correct": false
+                }
+            }
+        },
+        {
+            "id": 19,
+            "text": "what was Sophie Turner's name in game of thrones ? edited",
+            "mark": 10.0,
+            "answers": {
+                "16": {
+                    "text": "Sansa Snow",
+                    "is_correct": false
+                },
+                "17": {
+                    "text": "Sansa Stark",
+                    "is_correct": true
+                },
+                "18": {
+                    "text": "Sansa Greyhound",
+                    "is_correct": false
+                },
+                "19": {
+                    "text": "Sansa Sand",
+                    "is_correct": false
+                }
+            }
+        },
+        {
+            "text": "New Question",
+            "mark": 11.0,
+            "answers": {
+                "382": {
+                    "text": "ans1",
+                    "is_correct": true
+                },
+                "383": {
+                    "text": "ans2",
+                    "is_correct": false
+                },
+                "384": {
+                    "text": "ans3",
+                    "is_correct": false
+                },
+                "385": {
+                    "text": "ans4",
+                    "is_correct": false
+                }
+            }
+        }
+    ]
+}'```
+* Respons Sample:
+```sh
+HTTP 200 OK
+```
 #### POST /exam/{exam_id}/question/
 * General:
     - Returns the question that has been added.
