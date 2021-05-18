@@ -94,6 +94,9 @@ class AllowedStudents(models.Model):
     student = ForeignKey(Student, on_delete=models.CASCADE)
     exam = ForeignKey(Exam, on_delete=models.CASCADE)
     supervisor = models.ForeignKey(Supervisor,on_delete=models.SET_NULL,null = True, default=None)
+    enter_time = models.DateTimeField(null= True, blank= True, default= None)
+    submit_time = models.DateTimeField(null= True, blank= True, default= None)
+    attendance = models.BooleanField(default= False)
     def __str__(self):
         return str(self.exam) + " " + str(self.student) + " "+ str(self.supervisor)
 

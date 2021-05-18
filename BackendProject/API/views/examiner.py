@@ -1,12 +1,11 @@
 import math
-import random
 from django.contrib.auth import get_user_model
 from django.utils.decorators import method_decorator
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
-from ..serializers import AllowedStudentSerializer, AnswerSerializer, ExamResultSerializer, ExamSerializer, QuestionSerializer, StudentAnswerSerializer
+from ..serializers import AllowedStudentSerializer, AnswerSerializer, AttendanceSheetSerializer, ExamResultSerializer, ExamSerializer, QuestionSerializer, StudentAnswerSerializer
 from ..models import *
 from ..decorators import *
 from rest_framework.throttling import UserRateThrottle
@@ -49,7 +48,6 @@ class SingleExamView(APIView):
     def get(self, request, id):
         exam = Exam.objects.get(id = id)
         if exam.examiner.pk == request.user.id:
-            
             questions = Question.objects.filter(exam = exam)
             data = {}
             data['id'] = exam.id
@@ -75,56 +73,18 @@ class SingleExamView(APIView):
             return Response(status=status.HTTP_401_UNAUTHORIZED)
 
     def patch(self, request, id):
-        whole_exam = self.get(request,id).data
-        for key in whole_exam:
-            if key == 'id':
-                exam = Exam.objects.get(id = whole_exam[key])
-            if key == 'exam':
+        try:
+            exam = Exam.objects.get(id = id)
+            if exam.examiner.pk == request.user.id:
                 exam.exam_name = request.data['exam']
-            if key == 'startdate':
                 exam.exam_startdate = request.data['startdate']
-            if key == 'duration':
                 exam.exam_duration = request.data['duration']
                 exam.save()
-            if key == 'questions':
-                for index in range(len(request.data['questions'])):
-                    new_question = request.data['questions'][index]
-                    try:
-                        question = Question.objects.get(id = new_question['id'])
-                    except:
-                        break
-                    question.text = new_question['text']
-                    question.mark = new_question['mark']
-                    question.save()
-                    new_answers = new_question['answers']
-                    for ans_key in new_answers:
-                        answer = Answer.objects.get(id = ans_key)
-                        answer.text = new_answers[ans_key]['text']
-                        answer.is_correct = new_answers[ans_key]['is_correct']
-                        answer.save()
-
-                for new_q in request.data['questions']:
-                    flag = True
-                    for q in whole_exam['questions']:
-                        if new_q['text'] == q['text']:
-                            flag = False
-                    if flag:
-                        new_question = Question(exam = exam,text = new_q['text'], mark = new_q['mark'])
-                        new_question.save()
-                        for idx in new_q['answers']:
-                            new_answer = Answer(question = new_question,text = new_q['answers'][idx]['text'],is_correct = new_q['answers'][idx]['is_correct'])
-                            new_answer.save()
-
-                for q in whole_exam['questions']:
-                    flag = False
-                    for new_q in request.data['questions']:
-                        if new_q['text'] == q['text'] or new_q['id'] == q['id']:
-                            flag = True
-                    if not flag:
-                        deleted_question = Question.objects.get(id = q['id'])
-                        deleted_question.delete()
-                
-        return Response(status=status.HTTP_200_OK)
+                return Response(status=status.HTTP_200_OK)
+            else:
+                return Response(status = status.HTTP_401_UNAUTHORIZED)
+        except:
+            return Response(status = status.HTTP_404_NOT_FOUND)
 
 #@method_decorator(examiners_only, name='dispatch')
 class QuestionView(APIView):
@@ -144,6 +104,32 @@ class QuestionView(APIView):
                 return Response(status=status.HTTP_401_UNAUTHORIZED)
         return Response(serializer.errors, status= status.HTTP_400_BAD_REQUEST)
 
+class OneQuestionApi(APIView):
+    permission_classes= [IsAuthenticated]
+    def delete(self, request, pk , id):
+        try:
+            deleted_question = Question.objects.get(id = id)
+            if request.user.id != deleted_question.exam.examiner.pk:
+                    return Response(status=status.HTTP_401_UNAUTHORIZED)
+            deleted_question.delete()
+            return Response(status=status.HTTP_200_OK)
+        except Question.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+    def patch(self, request, pk, id):
+        try:
+            question = Question.objects.get(id = id)
+            if request.user.id != question.exam.examiner.pk:
+                return Response(status=status.HTTP_401_UNAUTHORIZED)
+            question.text = request.data['text']
+            question.mark = request.data['mark']
+            question.save()
+            return Response(status=status.HTTP_200_OK)
+        except Question.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+    
+
 #@method_decorator(examiners_only, name='dispatch')
 class AnswerView(APIView):
     permission_classes = [IsAuthenticated]
@@ -161,6 +147,44 @@ class AnswerView(APIView):
             else: 
                 return Response(status=status.HTTP_401_UNAUTHORIZED)
         return Response(serializer.errors, status= status.HTTP_400_BAD_REQUEST)
+
+class OneAnswerView(APIView):
+    permission_classes = [IsAuthenticated]
+    def delete(self, request, pk, id):
+        try:
+            deleted_answer = Answer.objects.get(id = id)
+            if request.user.id != deleted_answer.question.exam.examiner.pk:
+                    return Response(status=status.HTTP_401_UNAUTHORIZED)
+            deleted_answer.delete()
+            return Response(status=status.HTTP_200_OK)
+        except Answer.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+    def patch(self, request, pk, id):
+        try:
+            answer = Answer.objects.get(id = id)
+            if request.user.id != answer.question.exam.examiner.pk:
+                return Response(status=status.HTTP_401_UNAUTHORIZED)
+            answer.text = request.data['text']
+            answer.is_correct = request.data['is_correct']
+            answer.save()
+            return Response(status=status.HTTP_200_OK)
+        except Question.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+class AttendaceSheetView(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request, id):
+        try:
+            exam = Exam.objects.get(id = id)
+            if request.user.id != exam.examiner.pk:
+                return Response(status=status.HTTP_401_UNAUTHORIZED)
+            attendance = AllowedStudents.objects.filter(exam = exam, attendance = True)
+            serializer = AttendanceSheetSerializer(instance = attendance, many = True)
+            return Response(data = serializer.data,status=status.HTTP_200_OK)
+        except:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
 
 
 #@method_decorator(examiners_only, name='dispatch')

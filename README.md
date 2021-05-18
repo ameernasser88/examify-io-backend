@@ -202,83 +202,13 @@ python manage.py runserver
 ```
 #### PATCH /exam/{exam_id}/
 * General:
-    - Returns a whole exam.
+    - Returns 200 ok.
 * Request Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/{exam_id}/ -X PATCH -H "Content-Type: application/json"  "Authorization: Token <ACCESS_TOKEN>"
 '{
     "id": 13,
     "exam": "Movies",
     "startdate": "2021-05-25T14:52:37Z",
-    "duration": 3.0,
-    "questions": [
-        {
-            "id": 18,
-            "text": "what was tom hank's name in you've got mail ?",
-            "mark": 10.0,
-            "answers": {
-                "12": {
-                    "text": "Joe Fox",
-                    "is_correct": true
-                },
-                "13": {
-                    "text": "Joe Tom",
-                    "is_correct": false
-                },
-                "14": {
-                    "text": "Jack Tom",
-                    "is_correct": false
-                },
-                "15": {
-                    "text": "Jack Daniels",
-                    "is_correct": false
-                }
-            }
-        },
-        {
-            "id": 19,
-            "text": "what was Sophie Turner's name in game of thrones ? edited",
-            "mark": 10.0,
-            "answers": {
-                "16": {
-                    "text": "Sansa Snow",
-                    "is_correct": false
-                },
-                "17": {
-                    "text": "Sansa Stark",
-                    "is_correct": true
-                },
-                "18": {
-                    "text": "Sansa Greyhound",
-                    "is_correct": false
-                },
-                "19": {
-                    "text": "Sansa Sand",
-                    "is_correct": false
-                }
-            }
-        },
-        {
-            "text": "New Question",
-            "mark": 11.0,
-            "answers": {
-                "382": {
-                    "text": "ans1",
-                    "is_correct": true
-                },
-                "383": {
-                    "text": "ans2",
-                    "is_correct": false
-                },
-                "384": {
-                    "text": "ans3",
-                    "is_correct": false
-                },
-                "385": {
-                    "text": "ans4",
-                    "is_correct": false
-                }
-            }
-        }
-    ]
+    "duration": 3.0
 }'```
 * Respons Sample:
 ```sh
@@ -303,6 +233,28 @@ HTTP 200 OK
     "previous_question": null
 }
 ```
+#### PATCH /exam/{exam_id}/question/{question_id}/
+* General:
+    - Returns 200 ok.
+* Request Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/{exam_id}/question/{question_id}/ -X PATCH -H "Content-Type: application/json"  "Authorization: Token <ACCESS_TOKEN>" -d
+            '{
+    "id": 157,
+    "text": "what was Sophie Turner's name in game of thrones ? edited question",
+    "mark": 11.0
+}' 
+        ```
+* Respons Sample:
+```sh
+200 OK
+```
+#### DELETE /exam/{exam_id}/question/{question_id}/
+* General:
+    - Returns 200 ok.
+* Request Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/{exam_id}/question/{question_id}/ -X DELETE -H "Content-Type: application/json"  "Authorization: Token <ACCESS_TOKEN>" ```
+* Respons Sample:
+```sh
+200 OK
+```
 #### POST /exam/question/{question_id}/answer/
 * General:
     - Returns the answer that has been added.
@@ -321,12 +273,33 @@ HTTP 200 OK
     "question": 6
 }
 ```
+#### PATCH /exam/question/{question_id}/answer/{answer_id}/
+* General:
+    - Returns 200 OK.
+* Request Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/question/{question_id}/answer/{answer_id}/ -X PATCH -H "Content-Type: application/json" -H "Content-Type: application/json"  "Authorization: Token <ACCESS_TOKEN>" -d
+            '{
+    "text": "Sansa Snow new",
+    "is_correct": false
+}' 
+        ```
+* Respons Sample:
+```sh
+200 OK
+```
+#### DELETE /exam/question/{question_id}/answer/{answer_id}/
+* General:
+    - Returns 200 OK.
+* Request Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/question/{question_id}/answer/{answer_id}/ -X DELETE -H "Content-Type: application/json" -H "Content-Type: application/json"  "Authorization: Token <ACCESS_TOKEN>" -d ```
+* Respons Sample:
+```sh
+200 OK
+```
 #### POST exam/{exam_id}/allowed-students/
 * General:
     - Returns list of students that has been added.
 * Request Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/{exam_id}/allowed-students/ -X POST -H "Content-Type: application/json" "Authorization: Token <ACCESS_TOKEN>" -d
             '{
-                "student":["student1","student2"]
+                "students":["student1","student2"]
             }' 
         ```
 * Respons Sample:
@@ -370,6 +343,34 @@ HTTP 200 OK
         "student2"
     ]
 }
+```
+#### GET /exam/{exam_id}/attendance/
+* General:
+    - Returns list of students allowed to enter the exam.
+* Request Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/{exam_id}/attendance/ -H "Content-Type: application/json" "Authorization: Token <ACCESS_TOKEN>"
+        ```
+* Respons Sample:
+```sh
+[
+    {
+        "student_name": "student1",
+        "supervisor_name": "supervisor1",
+        "enter_time": "2021-05-18T18:34:37Z",
+        "submit_time": "2021-05-18T18:34:39Z"
+    },
+    {
+        "student_name": "student2",
+        "supervisor_name": "supervisor2",
+        "enter_time": "2021-05-18T18:32:12Z",
+        "submit_time": "2021-05-18T18:32:14Z"
+    },
+    {
+        "student_name": "student3",
+        "supervisor_name": "supervisor3",
+        "enter_time": "2021-05-18T18:32:47Z",
+        "submit_time": "2021-05-18T18:33:02Z"
+    }
+]
 ```
 #### GET /exam/{exam_id}/marks/
 * General:

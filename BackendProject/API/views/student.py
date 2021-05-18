@@ -30,7 +30,11 @@ class ExamView(APIView):
         if not timezone.now() < exam_endtime:
             error['error'] = ErrorMessages.objects.get(id = 2).error_message
             return Response(data = error,status=status.HTTP_401_UNAUTHORIZED)
-
+        
+        allowed_student = AllowedStudents.objects.filter(student = request.user.pk)
+        allowed_student.enter_time = timezone.now()
+        allowed_student.attendance = True
+        allowed_student.save()
         exam_info = {'exam_name':exam.exam_name,'exam_starttime':exam.exam_startdate, 'exam_duration':exam.exam_duration, 'questions':{}}
         questions = Question.objects.filter(exam = exam)
         exam_questions = {}
@@ -72,6 +76,9 @@ class SubmitExam(APIView):
                     total_mark = total_mark + question.mark
             exam_result = ExamResults(student=student,exam=exam,mark=total_mark)
             exam_result.save()
+            allowed_student = AllowedStudents.objects.get(student = student)
+            allowed_student.submit_time = timezone.now()
+            allowed_student.save()
             return Response(status = status.HTTP_200_OK)
         except:
             return Response(status = status.HTTP_404_NOT_FOUND)
