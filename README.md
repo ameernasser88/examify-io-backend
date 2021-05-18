@@ -202,7 +202,7 @@ python manage.py runserver
 ```
 #### PATCH /exam/{exam_id}/
 * General:
-    - Returns a whole exam.
+    - Returns 200 ok.
 * Request Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/{exam_id}/ -X PATCH -H "Content-Type: application/json"  "Authorization: Token <ACCESS_TOKEN>"
 '{
     "id": 13,
