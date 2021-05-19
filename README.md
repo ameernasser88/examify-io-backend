@@ -214,6 +214,14 @@ python manage.py runserver
 ```sh
 HTTP 200 OK
 ```
+#### Delete /exam/{exam_id}/
+* General:
+    - Returns 200 ok.
+* Request Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/{exam_id}/ -X Delete -H "Content-Type: application/json"  "Authorization: Token <ACCESS_TOKEN>"```
+* Respons Sample:
+```sh
+HTTP 200 OK
+```
 #### POST /exam/{exam_id}/question/
 * General:
     - Returns the question that has been added.

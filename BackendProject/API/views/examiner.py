@@ -86,6 +86,17 @@ class SingleExamView(APIView):
         except:
             return Response(status = status.HTTP_404_NOT_FOUND)
 
+    def delete(self, request, id):
+        try:
+            deleted_exam = Exam.objects.get(id = id)
+            if request.user.id != deleted_exam.examiner.pk:
+                    return Response(status=status.HTTP_401_UNAUTHORIZED)
+            deleted_exam.delete()
+            return Response(status=status.HTTP_200_OK)
+        except Exam.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+
 #@method_decorator(examiners_only, name='dispatch')
 class QuestionView(APIView):
     permission_classes = [IsAuthenticated]
