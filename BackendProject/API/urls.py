@@ -18,7 +18,7 @@ urlpatterns = [
     path('exam/<str:id>/submit/', student.SubmitExam.as_view()),
     path('exam/<str:id>/marks/', examiner.StudentMarksView.as_view()),
     path('exam/<str:id>/student/<str:st>/', examiner.StudentAnswerView.as_view()),
-    path('exam/<str:id>/supervisors/', examiner.AddSupervisorView.as_view())
+    path('exam/<str:id>/supervisors/', examiner.SupervisorView.as_view())
 ]
 
 

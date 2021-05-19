@@ -321,6 +321,35 @@ HTTP 200 OK
     "exam": 1
 }
 ```
+#### GET exam/{exam_id}/supervisors/
+* General:
+    - Retruns list of supervisors for the exam.
+* Request Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/{exam_id}/supervisors/ -X GET -H "Content-Type: application/json" "Authorization: Token <ACCESS_TOKEN>" -d```
+* Respons Sample:
+```sh
+[
+    {
+        "id": 29,
+        "supervisor_name": "supervisor1",
+        "student_name": "stu1"
+    },
+    {
+        "id": 26,
+        "supervisor_name": "supervisor2",
+        "student_name": "stu2"
+    },
+    {
+        "id": 27,
+        "supervisor_name": "supervisor3",
+        "student_name": "stu3"
+    },
+    {
+        "id": 28,
+        "supervisor_name": "supervisor1",
+        "student_name": "stu3"
+    }
+]
+```
 #### PATCH exam/{exam_id}/supervisors/
 * General:
     - adds supervisors to exam.

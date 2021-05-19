@@ -1,11 +1,12 @@
 import math
 from django.contrib.auth import get_user_model
 from django.utils.decorators import method_decorator
+from rest_framework.serializers import Serializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
-from ..serializers import AllowedStudentSerializer, AnswerSerializer, AttendanceSheetSerializer, ExamResultSerializer, ExamSerializer, QuestionSerializer, StudentAnswerSerializer
+from ..serializers import AllowedStudentSerializer, AnswerSerializer, AssignedSupervisors, AttendanceSheetSerializer, ExamResultSerializer, ExamSerializer, QuestionSerializer, StudentAnswerSerializer, SupervisorSerializer
 from ..models import *
 from ..decorators import *
 from rest_framework.throttling import UserRateThrottle
@@ -260,7 +261,7 @@ class StudentMarksView(APIView):
                 return Response(data = serializer.data,status=status.HTTP_200_OK )
             else:
                 return Response(status=status.HTTP_401_UNAUTHORIZED )
-        except ExamResults.DoesNotExist:
+        except ExamResults.DoesNotExist:    
             return Response(status=status.HTTP_404_NOT_FOUND)
 
 #@method_decorator(examiners_only, name='dispatch')
@@ -279,7 +280,7 @@ class StudentAnswerView(APIView):
             return Response(status.HTTP_404_NOT_FOUND)
         
 
-class AddSupervisorView(APIView):
+class SupervisorView(APIView):
     permission_classes=[IsAuthenticated]
 
     def get_allowed_studnts(self, id):
@@ -322,4 +323,22 @@ class AddSupervisorView(APIView):
                 return Response(status=status.HTTP_401_UNAUTHORIZED )
         except:
             return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    def get(self, request, id):
+        try:
+            exam = Exam.objects.get(id = id)
+            if exam.examiner.pk == request.user.id:
+                allowed_students = AllowedStudents.objects.filter(exam = exam)
+                
+                serializer = AssignedSupervisors(instance=allowed_students, many = True)
+                print(serializer.data)
+                return Response(data = serializer.data, status=status.HTTP_200_OK)
+            else:
+                return Response(status=status.HTTP_401_UNAUTHORIZED )
+        except Exam.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+        
+
         
