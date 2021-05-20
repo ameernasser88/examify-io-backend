@@ -78,11 +78,14 @@ class ExamResultSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = ExamResults
-        fields = ('student', 'student_name', 'mark')
+        fields = ('id', 'student_name', 'mark')
 
     student_name = serializers.SerializerMethodField('get_student_name')
+    id = serializers.SerializerMethodField('get_student_id')
     def get_student_name(self, obj):
         return obj.student.user.username
+    def get_student_id(self, obj):
+        return obj.student.user.id
 
 class StudentAnswerSerializer(serializers.ModelSerializer):
     class Meta:
