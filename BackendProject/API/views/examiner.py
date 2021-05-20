@@ -41,7 +41,7 @@ class ExamView(APIView):
             exams = Exam.objects.filter(examiner = examiner)
             serializer = ExamSerializer(instance = exams, many = True)
             return Response(data= serializer.data, status= status.HTTP_200_OK)
-        except Examiner.DoesNotExist:
+        except :
             return Response(status = status.HTTP_404_NOT_FOUND)
 
 class SingleExamView(APIView):
@@ -94,7 +94,7 @@ class SingleExamView(APIView):
                     return Response(status=status.HTTP_401_UNAUTHORIZED)
             deleted_exam.delete()
             return Response(status=status.HTTP_200_OK)
-        except Exam.DoesNotExist:
+        except :
             return Response(status=status.HTTP_404_NOT_FOUND)
 
 
@@ -125,7 +125,7 @@ class OneQuestionApi(APIView):
                     return Response(status=status.HTTP_401_UNAUTHORIZED)
             deleted_question.delete()
             return Response(status=status.HTTP_200_OK)
-        except Question.DoesNotExist:
+        except :
             return Response(status=status.HTTP_404_NOT_FOUND)
 
 
@@ -138,7 +138,7 @@ class OneQuestionApi(APIView):
             question.mark = request.data['mark']
             question.save()
             return Response(status=status.HTTP_200_OK)
-        except Question.DoesNotExist:
+        except :
             return Response(status=status.HTTP_404_NOT_FOUND)
     
 
@@ -243,7 +243,7 @@ class AllowedStudentsView(APIView):
                 return Response(data = data, status=status.HTTP_200_OK)
             else:
                 return Response(status=status.HTTP_401_UNAUTHORIZED)
-        except AllowedStudents.DoesNotExist:
+        except:
             return Response(status = status.HTTP_404_NOT_FOUND)
 
 #@method_decorator(examiners_only, name='dispatch')
@@ -262,7 +262,7 @@ class StudentMarksView(APIView):
                 return Response(data = serializer.data,status=status.HTTP_200_OK )
             else:
                 return Response(status=status.HTTP_401_UNAUTHORIZED )
-        except ExamResults.DoesNotExist:    
+        except:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
 #@method_decorator(examiners_only, name='dispatch')
@@ -274,14 +274,16 @@ class StudentAnswerView(APIView):
     permission_classes=[IsAuthenticated]
     def get(self, request, id, st):
         try:
-            print("#################################3")
             exam = Exam.objects.get(id=id)
             student = Student.objects.get(user_id=st)
-            student_answers = StudentAnswer.objects.filter(exam=exam, student = student)
-            serializer = StudentAnswerSerializer(student_answers, many=True)
-            return Response(data = serializer.data, status= status.HTTP_202_ACCEPTED)
-        except StudentAnswer.DoesNotExist:
-            return Response(status.HTTP_404_NOT_FOUND)
+            if exam.examiner.pk == request.user.id:
+                student_answers = StudentAnswer.objects.filter(exam=exam, student = student)
+                serializer = StudentAnswerSerializer(student_answers, many=True)
+                return Response(data = serializer.data, status= status.HTTP_202_ACCEPTED)
+            else:
+                return Response(status=status.HTTP_401_UNAUTHORIZED )
+        except:
+            return Response(status=status.HTTP_404_NOT_FOUND)
         
 
 class SupervisorView(APIView):
@@ -339,7 +341,7 @@ class SupervisorView(APIView):
                 return Response(data = serializer.data, status=status.HTTP_200_OK)
             else:
                 return Response(status=status.HTTP_401_UNAUTHORIZED )
-        except Exam.DoesNotExist:
+        except:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
 
