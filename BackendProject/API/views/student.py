@@ -77,8 +77,9 @@ class SubmitExam(APIView):
                     total_mark = total_mark + question.mark
             exam_result = ExamResults(student=student,exam=exam,mark=total_mark)
             exam_result.save()
-            allowed_student = AllowedStudents.objects.get(student = student)
+            allowed_student = AllowedStudents.objects.get(student = student , exam=exam)
             allowed_student.submit_time = timezone.now()
+            allowed_student.attendance = True
             allowed_student.save()
             return Response(status = status.HTTP_200_OK)
         except:
