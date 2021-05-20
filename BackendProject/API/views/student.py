@@ -40,7 +40,7 @@ class ExamView(APIView):
         questions = Question.objects.filter(exam = exam)
         exam_questions = {}
         for question in questions:
-            exam_questions[question.text] = {'mark': question.mark, 'previous_question':question.previous_question,'answers':{}}
+            exam_questions[question.text] = {'id':question.id , 'mark': question.mark, 'previous_question':question.previous_question,'answers':{}}
             exam_answers = {}
             answers = Answer.objects.filter(question = question)
             for answer in answers:
