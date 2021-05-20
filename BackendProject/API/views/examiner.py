@@ -255,9 +255,10 @@ class StudentMarksView(APIView):
     permission_classes=[IsAuthenticated]
     def get(self, request, id):
         try:
-            exam = ExamResults.objects.filter(exam = id)
+            exam = Exam.objects.get(id=id)
+            qs = ExamResults.objects.filter(exam=exam)
             if exam.examiner.pk == request.user.id:
-                serializer = ExamResultSerializer(instance = exam, many = True)
+                serializer = ExamResultSerializer(qs, many = True)
                 return Response(data = serializer.data,status=status.HTTP_200_OK )
             else:
                 return Response(status=status.HTTP_401_UNAUTHORIZED )
