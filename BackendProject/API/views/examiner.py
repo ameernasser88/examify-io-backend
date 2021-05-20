@@ -274,8 +274,11 @@ class StudentAnswerView(APIView):
     permission_classes=[IsAuthenticated]
     def get(self, request, id, st):
         try:
-            student_answer = StudentAnswer.objects.filter(exam = id, student =  st)
-            serializer = StudentAnswerSerializer(instance=student_answer, many=True)
+            print("#################################3")
+            exam = Exam.objects.get(id=id)
+            student = Student.objects.get(user_id=st)
+            student_answers = StudentAnswer.objects.filter(exam=exam, student = student)
+            serializer = StudentAnswerSerializer(student_answers, many=True)
             return Response(data = serializer.data, status= status.HTTP_202_ACCEPTED)
         except StudentAnswer.DoesNotExist:
             return Response(status.HTTP_404_NOT_FOUND)

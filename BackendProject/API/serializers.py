@@ -97,22 +97,16 @@ class StudentAnswerSerializer(serializers.ModelSerializer):
 
 
     def get_exam_name(self, obj):
-        exam = Exam.objects.get(id = obj.exam.id)
-        return exam.exam_name
+        return obj.exam.exam_name
 
     def get_student_name(self, obj):
-        user = User.objects.get(pk = obj.student.pk)
-        return user.username
-
+        return obj.student.user.username
     
     def get_question_text(self, obj):
-        question = Question.objects.get(id = obj.exam.id)
-        return question.text
+        return obj.question.text
 
     def get_answer_text(self, obj):
-        answer = Answer.objects.get(id = obj.answer.id)
-        return answer.text
+        return obj.answer.text
 
     def is_answer_correct(self, obj):
-        answer = Answer.objects.get(id = obj.answer.id)
-        return answer.is_correct
+        return obj.answer.is_correct
