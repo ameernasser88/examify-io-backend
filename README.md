@@ -418,12 +418,12 @@ HTTP 200 OK
 ```sh
 [
     {
-        "student": 41,
+        "id": 41,
         "student_name": "student 1",
         "mark": 40.0
     },
     {
-        "student": 6,
+        "id": 6,
         "student_name": "student 2",
         "mark": 39.5
     }
