@@ -30,8 +30,9 @@ class ExamView(APIView):
         if not timezone.now() < exam_endtime:
             error['error'] = ErrorMessages.objects.get(id = 2).error_message
             return Response(data = error,status=status.HTTP_401_UNAUTHORIZED)
-        
-        allowed_student = AllowedStudents.objects.filter(student = request.user.pk)
+
+        student = Student.objects.get(user = request.user)
+        allowed_student = AllowedStudents.objects.get(student = student , exam=exam)
         allowed_student.enter_time = timezone.now()
         allowed_student.attendance = True
         allowed_student.save()
