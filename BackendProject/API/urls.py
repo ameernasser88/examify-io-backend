@@ -14,11 +14,13 @@ urlpatterns = [
     path('exam/question/<str:pk>/answer/', examiner.AnswerView.as_view()),
     path('exam/question/<str:pk>/answer/<str:id>/', examiner.OneAnswerView.as_view()),
     path('exam/<str:id>/allowed-students/', examiner.AllowedStudentsView.as_view()),
+    path('exam/<str:id>/allowed-students/<str:st>/', examiner.OneAllowedStudentsView.as_view()),
     path('exam/<str:id>/start/', student.ExamView.as_view()),
     path('exam/<str:id>/submit/', student.SubmitExam.as_view()),
     path('exam/<str:id>/marks/', examiner.StudentMarksView.as_view()),
     path('exam/<str:id>/student/<str:st>/', examiner.StudentAnswerView.as_view()),
-    path('exam/<str:id>/supervisors/', examiner.SupervisorView.as_view())
+    path('exam/<str:id>/supervisors/', examiner.SupervisorView.as_view()),
+    
 ]
 
 

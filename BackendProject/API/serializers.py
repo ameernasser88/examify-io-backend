@@ -35,7 +35,7 @@ class QuestionSerializer(serializers.ModelSerializer):
 class AllowedStudentSerializer(serializers.ModelSerializer):
     class Meta:
         model = AllowedStudents
-        fields = ('student','exam')
+        fields = ('id','student','exam')
 
 class AttendanceSheetSerializer(serializers.ModelSerializer):
     class Meta:
@@ -64,14 +64,18 @@ class SupervisorSerializer(serializers.ModelSerializer):
 class AssignedSupervisors(serializers.ModelSerializer):
     class Meta:
         model = AllowedStudents
-        fields = ('id','supervisor_name', 'student_name')
+        fields = ('supervisor','supervisor_name', 'student_id', 'student_name')
     student_name = serializers.SerializerMethodField('get_student_name')
+    student_id = serializers.SerializerMethodField('get_student_id')
+    supervisor_name = serializers.SerializerMethodField('get_supervisor_name')
+    def get_student_id(self, obj):
+        user = User.objects.get(pk = obj.student.pk)
+        return user.id
     def get_student_name(self, obj):
         user = User.objects.get(pk = obj.student.pk)
         return user.username
-    supervisor_name = serializers.SerializerMethodField('get_supervisor_name')
     def get_supervisor_name(self, obj):
-        user = User.objects.get(pk = obj.supervisor.pk)
+        user = User.objects.get(id = obj.supervisor.pk)
         return user.username
 
 class ExamResultSerializer(serializers.ModelSerializer):

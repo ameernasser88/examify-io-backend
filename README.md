@@ -321,6 +321,30 @@ HTTP 200 OK
     "exam": 1
 }
 ```
+#### GET exam/{exam_id}/allowed-students/
+* General:
+    - Returns list of students allowed to enter the exam.
+* Request Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/{exam_id}/allowed-students/ -H "Content-Type: application/json" "Authorization: Token <ACCESS_TOKEN>"
+        ```
+* Respons Sample:
+```sh
+    {
+    "exam": 1,
+    "student": [
+        "student1",
+        "student2"
+    ]
+}
+```
+#### DELETE exam/{exam_id}/allowed-students/{student_id}/
+* General:
+    - Delete allowed student to enter the exam.
+* Request Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/{exam_id}/allowed-students/{student_id}/ -x DELETE -H "Content-Type: application/json" "Authorization: Token <ACCESS_TOKEN>"
+        ```
+* Respons Sample:
+```sh
+  200 OK
+```
 #### GET exam/{exam_id}/supervisors/
 * General:
     - Retruns list of supervisors for the exam.
@@ -366,21 +390,7 @@ HTTP 200 OK
 ```sh
 201 Created 
 ```
-#### GET exam/{exam_id}/allowed-students/
-* General:
-    - Returns list of students allowed to enter the exam.
-* Request Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/{exam_id}/allowed-students/ -H "Content-Type: application/json" "Authorization: Token <ACCESS_TOKEN>"
-        ```
-* Respons Sample:
-```sh
-    {
-    "exam": 1,
-    "student": [
-        "student1",
-        "student2"
-    ]
-}
-```
+
 #### GET /exam/{exam_id}/attendance/
 * General:
     - Returns list of students allowed to enter the exam.
