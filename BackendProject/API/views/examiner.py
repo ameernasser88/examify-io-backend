@@ -21,29 +21,20 @@ def get_allowed_studnts(id):
 
 def reassign_supervisors_to_students(supervisors, exam):
     num_of_supervisors = len(supervisors)
+    if num_of_supervisors == 0:
+        return None
     allowed_students = get_allowed_studnts(exam.id)
     num_of_allowed_students = len(allowed_students)
-    num_of_assigend_students = math.floor(num_of_allowed_students / num_of_supervisors)
-    extra_students = num_of_allowed_students - (num_of_assigend_students * num_of_supervisors)
-    data = {}
-    index = 0
-    extra_index = 0
-    
-    for supervisor in supervisors:
-        user = User.objects.get(username = supervisor)
-        supervisorOb = Supervisor.objects.get(user = user)
-        data['supervisor'] = supervisorOb
-        for index in range(index,index+num_of_assigend_students):
-            allowed_students[index].supervisor = supervisorOb
-            allowed_students[index].save()
-        index += 1
 
-    if extra_students > 0:
-        for extra_index in range(extra_index, extra_index+extra_students):
-            user = User.objects.get(username = supervisors[num_of_supervisors-1-extra_index])
-            supervisorOb = Supervisor.objects.get(user = user)
-            allowed_students[index+extra_index].supervisor = supervisorOb
-            allowed_students[index+extra_index].save()
+    super_index = 0
+    for student in allowed_students:
+        if super_index >= num_of_supervisors:
+            super_index = 0
+        user = User.objects.get(username = supervisors[super_index])
+        supervisorOb = Supervisor.objects.get(user = user)
+        student.supervisor = supervisorOb
+        student.save()
+        super_index +=1
     return None
 
 # class UserMinThrottle(UserRateThrottle):
@@ -270,7 +261,7 @@ class AllowedStudentsView(APIView):
                 else:
                     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
             return Response(status=status.HTTP_201_CREATED)
-            
+                
         except:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
