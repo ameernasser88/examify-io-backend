@@ -56,7 +56,7 @@ python manage.py runserver
                 "user_type":"1"
                 }' 
             ```
-* Respons Sample:
+* Response Sample:
 ```sh
 {
     "key": "52862e084f56792e2644b1801952a728a75fd8e5",
@@ -72,7 +72,7 @@ python manage.py runserver
             "password":"Aa123456789"
             }' 
             ```
-* Respons Sample:
+* Response Sample:
 ```sh
 {
     "key": "bd5188970056063a94afcf859820713f8cab743e",
@@ -90,7 +90,7 @@ python manage.py runserver
             "exam_duration": 3.0
             }' 
             ```
-* Respons Sample:
+* Response Sample:
 ```sh
 {
     "id": 1,
@@ -104,7 +104,7 @@ python manage.py runserver
 * General:
     - Returns exam list for the logged in examiner.
 * Request Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/ -H "Content-Type: application/json"  "Authorization: Token <ACCESS_TOKEN>"```
-* Respons Sample:
+* Response Sample:
 ```sh
 {
     {
@@ -120,7 +120,7 @@ python manage.py runserver
 * General:
     - Returns a whole exam.
 * Request Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/{exam_id}/ -H "Content-Type: application/json"  "Authorization: Token <ACCESS_TOKEN>"```
-* Respons Sample:
+* Response Sample:
 ```sh
 {
     "id": 13,
@@ -210,7 +210,7 @@ python manage.py runserver
     "startdate": "2021-05-25T14:52:37Z",
     "duration": 3.0
 }'```
-* Respons Sample:
+* Response Sample:
 ```sh
 HTTP 200 OK
 ```
@@ -218,7 +218,7 @@ HTTP 200 OK
 * General:
     - Returns 200 ok.
 * Request Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/{exam_id}/ -X Delete -H "Content-Type: application/json"  "Authorization: Token <ACCESS_TOKEN>"```
-* Respons Sample:
+* Response Sample:
 ```sh
 HTTP 200 OK
 ```
@@ -231,7 +231,7 @@ HTTP 200 OK
             "mark": 100
             }' 
         ```
-* Respons Sample:
+* Response Sample:
 ```sh
 {
     "id": 6,
@@ -251,7 +251,7 @@ HTTP 200 OK
     "mark": 11.0
 }' 
         ```
-* Respons Sample:
+* Response Sample:
 ```sh
 200 OK
 ```
@@ -259,7 +259,7 @@ HTTP 200 OK
 * General:
     - Returns 200 ok.
 * Request Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/{exam_id}/question/{question_id}/ -X DELETE -H "Content-Type: application/json"  "Authorization: Token <ACCESS_TOKEN>" ```
-* Respons Sample:
+* Response Sample:
 ```sh
 200 OK
 ```
@@ -272,7 +272,7 @@ HTTP 200 OK
             "is_correct":true
             }' 
         ```
-* Respons Sample:
+* Response Sample:
 ```sh
 {
     "id": 3,
@@ -290,7 +290,7 @@ HTTP 200 OK
     "is_correct": false
 }' 
         ```
-* Respons Sample:
+* Response Sample:
 ```sh
 200 OK
 ```
@@ -298,7 +298,7 @@ HTTP 200 OK
 * General:
     - Returns 200 OK.
 * Request Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/question/{question_id}/answer/{answer_id}/ -X DELETE -H "Content-Type: application/json" -H "Content-Type: application/json"  "Authorization: Token <ACCESS_TOKEN>" -d ```
-* Respons Sample:
+* Response Sample:
 ```sh
 200 OK
 ```
@@ -310,7 +310,7 @@ HTTP 200 OK
                 "students":["student1","student2"]
             }' 
         ```
-* Respons Sample:
+* Response Sample:
 ```sh
 {
     "id": 2,
@@ -326,7 +326,7 @@ HTTP 200 OK
     - Returns list of students allowed to enter the exam.
 * Request Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/{exam_id}/allowed-students/ -H "Content-Type: application/json" "Authorization: Token <ACCESS_TOKEN>"
         ```
-* Respons Sample:
+* Response Sample:
 ```sh
     {
     "exam": 1,
@@ -341,7 +341,7 @@ HTTP 200 OK
     - Delete allowed student to enter the exam.
 * Request Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/{exam_id}/allowed-students/{student_id}/ -x DELETE -H "Content-Type: application/json" "Authorization: Token <ACCESS_TOKEN>"
         ```
-* Respons Sample:
+* Response Sample:
 ```sh
   200 OK
 ```
@@ -349,7 +349,7 @@ HTTP 200 OK
 * General:
     - Retruns list of supervisors for the exam.
 * Request Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/{exam_id}/supervisors/ -X GET -H "Content-Type: application/json" "Authorization: Token <ACCESS_TOKEN>" -d```
-* Respons Sample:
+* Response Sample:
 ```sh
 [
     {
@@ -386,7 +386,7 @@ HTTP 200 OK
             ]
         }' 
         ```
-* Respons Sample:
+* Response Sample:
 ```sh
 201 Created 
 ```
@@ -396,7 +396,7 @@ HTTP 200 OK
     - Returns list of students allowed to enter the exam.
 * Request Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/{exam_id}/attendance/ -H "Content-Type: application/json" "Authorization: Token <ACCESS_TOKEN>"
         ```
-* Respons Sample:
+* Response Sample:
 ```sh
 [
     {
@@ -407,7 +407,7 @@ HTTP 200 OK
     },
     {
         "student_name": "student2",
-        "supervisor_name": "supervisor2",
+        "supervisor_name": "supervisor2"git ,
         "enter_time": "2021-05-18T18:32:12Z",
         "submit_time": "2021-05-18T18:32:14Z"
     },
@@ -424,7 +424,7 @@ HTTP 200 OK
     - Returns list of students marks in exam.
 * Request Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/{exam_id}/marks/ -H "Content-Type: application/json" "Authorization: Token <ACCESS_TOKEN>"
         ```
-* Respons Sample:
+* Response Sample:
 ```sh
 [
     {
@@ -444,7 +444,7 @@ HTTP 200 OK
     - Returns the exam of the student.
 * Request Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/{exam_id}/student/{student_id}/  -H "Content-Type: application/json" "Authorization: Token <ACCESS_TOKEN>"
         ```
-* Respons Sample:
+* Response Sample:
 ```sh
 [
     {
@@ -487,7 +487,7 @@ HTTP 200 OK
 * General:
     - Returns the whole exam for the student.
 * Request Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/{exam_id}/start/ -H "Authorization: Token <ACCESS_TOKEN>" ```
-* Respons Sample:
+* Response Sample:
 ```sh
 {
     "exam_name": "Exam test",
@@ -525,7 +525,7 @@ HTTP 200 OK
     }
 }'```
     -  where question id and 12 is chosen answer id
-* Respons Sample:
+* Response Sample:
 ```sh
 HTTP 200 OK
 ```
