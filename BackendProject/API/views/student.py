@@ -1,3 +1,4 @@
+from ..serializers import StudentAllExamsSerializer
 import math
 from django.utils.decorators import method_decorator
 from ..models import *
@@ -40,12 +41,12 @@ class ExamView(APIView):
         questions = Question.objects.filter(exam = exam)
         exam_questions = {}
         for question in questions:
-            exam_questions[question.text] = {'id':question.id , 'mark': question.mark, 'previous_question':question.previous_question,'answers':{}}
+            exam_questions[question.id] = {'text': question.text, 'mark': question.mark, 'previous_question':question.previous_question,'answers':{}}
             exam_answers = {}
             answers = Answer.objects.filter(question = question)
             for answer in answers:
                 exam_answers[answer.id] = answer.text
-            exam_questions[question.text]['answers'] = exam_answers
+            exam_questions[question.id]['answers'] = exam_answers
             exam_info['questions'] = exam_questions
         return Response(status=status.HTTP_200_OK,data = exam_info)
 
@@ -85,8 +86,10 @@ class SubmitExam(APIView):
         except:
             return Response(status = status.HTTP_404_NOT_FOUND)
 
-
-
-
-
-
+class StudentDashboardView(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request):
+        user = Student.objects.get(user = request.user.pk)
+        student_exams = AllowedStudents.objects.filter(student = user)
+        serializer = StudentAllExamsSerializer(student_exams, many = True)
+        return Response(status = status.HTTP_200_OK, data = serializer.data)

@@ -20,6 +20,8 @@ urlpatterns = [
     path('exam/<str:id>/marks/', examiner.StudentMarksView.as_view()),
     path('exam/<str:id>/student/<str:st>/', examiner.StudentAnswerView.as_view()),
     path('exam/<str:id>/supervisors/', examiner.SupervisorView.as_view()),
+    path('exam/<str:id>/supervisor/<str:sp>/', examiner.OneSupervisorView.as_view()),
+    path('student/dashboard/',student.StudentDashboardView.as_view())
     
 ]
 

@@ -1,4 +1,7 @@
+from datetime import timedelta
+import math
 from django.db.models import fields
+from django.utils import timezone
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
 from .models import *
@@ -61,6 +64,11 @@ class SupervisorSerializer(serializers.ModelSerializer):
         model = Supervisor
         fields = ('username')
 
+class AddSupervisorToExamSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ExamSupervisors
+        fields = '__all__'
+
 class AssignedSupervisors(serializers.ModelSerializer):
     class Meta:
         model = AllowedStudents
@@ -69,15 +77,57 @@ class AssignedSupervisors(serializers.ModelSerializer):
     student_id = serializers.SerializerMethodField('get_student_id')
     supervisor_name = serializers.SerializerMethodField('get_supervisor_name')
     def get_student_id(self, obj):
-        user = User.objects.get(pk = obj.student.pk)
+        user = User.objects.get(pk = obj.student.user.id)
         return user.id
     def get_student_name(self, obj):
-        user = User.objects.get(pk = obj.student.pk)
+        user = User.objects.get(pk = obj.student.user.id)
         return user.username
     def get_supervisor_name(self, obj):
-        user = User.objects.get(id = obj.supervisor.pk)
+        user = User.objects.get(id = obj.supervisor.user.id)
         return user.username
 
+class StudentAllExamsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AllowedStudents
+        fields = ('exam_id','exam_name','student_id','student_name', 'full_mark', 'student_mark', 'is_started')
+    student_name = serializers.SerializerMethodField('get_student_name')
+    student_id = serializers.SerializerMethodField('get_student_id')
+    exam_name = serializers.SerializerMethodField('get_exam_name')
+    full_mark = serializers.SerializerMethodField('get_exam_full_mark')
+    student_mark = serializers.SerializerMethodField('get_student_mark')
+    is_started = serializers.SerializerMethodField('check_exam_is_started')
+    def get_student_id(self, obj):
+        user = User.objects.get(pk = obj.student.user.id)
+        return user.id
+    def get_student_name(self, obj):
+        user = User.objects.get(pk = obj.student.user.id)
+        return user.username
+    def get_exam_name(self, obj):
+        exam = Exam.objects.get(id = obj.exam.id)
+        return exam.exam_name
+    def get_exam_full_mark(self, obj):
+        exam = Exam.objects.get(id = obj.exam.id)
+        exam_questions = Question.objects.filter(exam = exam)
+        total_mark = 0
+        for question in exam_questions:
+            total_mark += question.mark
+        return total_mark
+    def get_student_mark(self, obj):
+        try:
+            student_mark = ExamResults.objects.get(exam = obj.exam.id, student = obj.student.user.id).mark
+            return student_mark
+        except ExamResults.DoesNotExist:
+            return 0
+    def check_exam_is_started(self, obj):
+        exam = Exam.objects.get(id = obj.exam.id)
+        mins,hrs = math.modf(exam.exam_duration)
+        exam_endtime = exam.exam_startdate + timedelta(hours = hrs, minutes=mins*60)
+        if not timezone.now() >= exam.exam_startdate :
+            return 'The Exam has not started yet'
+        if not timezone.now() < exam_endtime:
+            return 'The Exam is Closed'
+        else:
+            return 'The Exam is Open'
 class ExamResultSerializer(serializers.ModelSerializer):
     
     class Meta:

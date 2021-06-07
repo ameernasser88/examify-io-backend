@@ -79,6 +79,13 @@ class ExamResults(models.Model):
         return "Student : " +str(self.student) + " Exam : " + str(self.exam) + " Mark : " + str(self.mark)
 
 
+class ExamSupervisors(models.Model):
+    supervisor = models.ForeignKey(Supervisor,on_delete=models.SET_NULL,null = True, default=None)
+    exam = ForeignKey(Exam, on_delete=models.CASCADE)
+    def __str__(self):
+        return str(self.exam) +" "+ str(self.supervisor)
+
+
 class AllowedStudents(models.Model):
     student = ForeignKey(Student, on_delete=models.CASCADE)
     exam = ForeignKey(Exam, on_delete=models.CASCADE)

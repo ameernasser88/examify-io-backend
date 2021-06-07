@@ -7,7 +7,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
-from ..serializers import AllowedStudentSerializer, AnswerSerializer, AssignedSupervisors, AttendanceSheetSerializer, ExamResultSerializer, ExamSerializer, QuestionSerializer, StudentAnswerSerializer, SupervisorSerializer
+from ..serializers import AddSupervisorToExamSerializer, AllowedStudentSerializer, AnswerSerializer, AssignedSupervisors, AttendanceSheetSerializer, ExamResultSerializer, ExamSerializer, QuestionSerializer, StudentAnswerSerializer, SupervisorSerializer
 from ..models import *
 from ..decorators import *
 from rest_framework.throttling import UserRateThrottle
@@ -349,17 +349,31 @@ class StudentAnswerView(APIView):
 
 class SupervisorView(APIView):
     permission_classes=[IsAuthenticated]
-    def patch(self, request, id):
+    def post(self, request, id):
         try:
             User = get_user_model()
             supervisors = request.data['supervisor']
             exam = Exam.objects.get(id=id)
+            assigned_supervisors = ExamSupervisors.objects.filter(exam = exam)
+            assigned_supervisors_names = []
+            for supervisor in assigned_supervisors:
+                assigned_supervisors_names.append(supervisor.supervisor.user.username)
             if exam.examiner.pk != request.user.id:
                 return Response(status=status.HTTP_401_UNAUTHORIZED )
+            for supervisor in supervisors:
+                if supervisor in assigned_supervisors_names:
+                    continue
+                user = User.objects.get(username = supervisor)
+                supervisorOb = Supervisor.objects.get(user = user)
+                data = {'supervisor':supervisorOb,'exam':exam.id}
+                serializer = AddSupervisorToExamSerializer(data = data)
+                if serializer.is_valid():
+                    serializer.save()
             assign_supervisors = reassign_supervisors_to_students(supervisors,exam)
             return Response(status=status.HTTP_200_OK)
         except:
             return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
 
     def get(self, request, id):
         try:
@@ -369,5 +383,22 @@ class SupervisorView(APIView):
             allowed_students = AllowedStudents.objects.filter(exam = exam)
             serializer = AssignedSupervisors(instance=allowed_students, many = True)
             return Response(data = serializer.data, status=status.HTTP_200_OK)
+        except :
+            return Response(status=status.HTTP_404_NOT_FOUND)
+class OneSupervisorView(APIView):
+    permission_classes = [IsAuthenticated]
+    def delete(self, request, id, sp):
+        try:
+            supervisor = ExamSupervisors.objects.get(exam = id, supervisor = sp)
+            if supervisor.exam.examiner.pk != request.user.id:
+                return Response(status=status.HTTP_401_UNAUTHORIZED )
+            supervisor.delete()
+            exam = Exam.objects.get(id=id)
+            supervisors = ExamSupervisors.objects.filter(exam = id)
+            assigned_supervisors_names = []
+            for supervisor in supervisors:
+                assigned_supervisors_names.append(supervisor.supervisor.user.username)
+            assign_supervisors = reassign_supervisors_to_students(assigned_supervisors_names,exam)
+            return Response(status=status.HTTP_200_OK)
         except :
             return Response(status=status.HTTP_404_NOT_FOUND)

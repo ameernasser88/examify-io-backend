@@ -374,10 +374,10 @@ HTTP 200 OK
     }
 ]
 ```
-#### PATCH exam/{exam_id}/supervisors/
+#### POST exam/{exam_id}/supervisors/
 * General:
     - adds supervisors to exam.
-* Request Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/{exam_id}/supervisors/ -X PATCH -H "Content-Type: application/json" "Authorization: Token <ACCESS_TOKEN>" -d
+* Request Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/{exam_id}/supervisors/ -X POST -H "Content-Type: application/json" "Authorization: Token <ACCESS_TOKEN>" -d
         '{
             "supervisor": [
                 "super1",
@@ -390,7 +390,15 @@ HTTP 200 OK
 ```sh
 201 Created 
 ```
-
+#### DELETE exam/{exam_id}/supervisor/{supervisor_id}
+* General:
+    - delete assigned supervisor to exam.
+* Request Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/{exam_id}/supervisor/{supervisor_id} -X DELETE -H "Content-Type: application/json" "Authorization: Token <ACCESS_TOKEN>" 
+        ```
+* Response Sample:
+```sh
+200 OK 
+```
 #### GET /exam/{exam_id}/attendance/
 * General:
     - Returns list of students allowed to enter the exam.
@@ -483,6 +491,42 @@ HTTP 200 OK
 ]
 ```
 ## For Student:
+#### GET student/dashboard/
+* General:
+    - Returns all exams for the logged in student.
+* Request Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/student/dashboard/ -H "Authorization: Token <ACCESS_TOKEN>" ```
+* Response Sample:
+```sh
+[
+    {
+        "exam_id": 140,
+        "exam_name": "Movies",
+        "student_id": 6,
+        "student_name": "stu1",
+        "full_mark": 20.0,
+        "student_mark": 10.0,
+        "is_started": "The Exam is Closed"
+    },
+    {
+        "exam_id": 163,
+        "exam_name": "Physics",
+        "student_id": 6,
+        "student_name": "stu1",
+        "full_mark": 4.0,
+        "student_mark": 0,
+        "is_started": "The Exam is Open"
+    },
+    {
+        "exam_id": 147,
+        "exam_name": "Maths",
+        "student_id": 6,
+        "student_name": "stu1",
+        "full_mark": 100.0,
+        "student_mark": 0,
+        "is_started": "The Exam is Closed"
+    }
+]
+```
 #### GET /exam/{exam_id}/start/
 * General:
     - Returns the whole exam for the student.
