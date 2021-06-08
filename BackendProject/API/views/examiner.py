@@ -431,14 +431,19 @@ class ExamStatisticsView(APIView):
         return all_questions_data
 
     def get(self, request, id):
-        exam = Exam.objects.get(id = id)
-        exam_results = ExamResults.objects.filter(exam = exam)
-        mark = 0
-        data = {}
-        data['total_mark'] = Question.objects.filter(exam = exam).aggregate(total_mark = Sum('mark'))['total_mark']
-        data['name'] = exam.exam_name
-        data['exam_statistics'] = exam_results.aggregate(avg = Avg('mark'), max = Max('mark'), min = Min('mark'), 
-            num_of_students_submited_the_exam = Count('student'), standard_deviation = StdDev('mark'))
-        questions_statistics = self.get_questions_statistics(exam = exam)
-        data = [data,questions_statistics]
-        return Response(status=status.HTTP_200_OK, data = data)
+        try:
+            exam = Exam.objects.get(id = id)
+            if exam.examiner.pk != request.user.id:
+                return Response(status=status.HTTP_401_UNAUTHORIZED )
+            exam_results = ExamResults.objects.filter(exam = exam)
+            mark = 0
+            data = {}
+            data['total_mark'] = Question.objects.filter(exam = exam).aggregate(total_mark = Sum('mark'))['total_mark']
+            data['name'] = exam.exam_name
+            data['exam_statistics'] = exam_results.aggregate(avg = Avg('mark'), max = Max('mark'), min = Min('mark'), 
+                num_of_students_submited_the_exam = Count('student'), standard_deviation = StdDev('mark'))
+            questions_statistics = self.get_questions_statistics(exam = exam)
+            data = [data,questions_statistics]
+            return Response(status=status.HTTP_200_OK, data = data)
+        except:
+            return Response(status=status.HTTP_404_NOT_FOUND)
