@@ -1,6 +1,7 @@
 import math
 from django.contrib.auth import get_user_model
 from django.db.models import Count
+from django.db.models.aggregates import Avg, Max, Min, StdDev, Sum
 from django.utils.decorators import method_decorator
 from rest_framework.serializers import Serializer
 from rest_framework.views import APIView
@@ -402,3 +403,18 @@ class OneSupervisorView(APIView):
             return Response(status=status.HTTP_200_OK)
         except :
             return Response(status=status.HTTP_404_NOT_FOUND)
+
+class ExamStatisticsView(APIView):
+    def get(self, request, id):
+        exam = Exam.objects.get(id = id)
+        exam_results = ExamResults.objects.filter(exam = exam)
+        mark = 0
+        total_mark = Question.objects.filter(exam = exam).aggregate(total_mark = Sum('mark'))
+        name = {'exam_name':exam.exam_name}
+        avg = exam_results.aggregate(avg = Avg('mark'))
+        maximum = exam_results.aggregate(max = Max('mark'))
+        minimum = exam_results.aggregate(min = Min('mark'))
+        count = exam_results.aggregate(num_of_students_submited_the_exam = Count('student'))
+        stdev = exam_results.aggregate(standard_deviation = StdDev('mark'))
+        data = [name,total_mark,count,avg,minimum,maximum,stdev]
+        return Response(status=status.HTTP_200_OK, data = data)

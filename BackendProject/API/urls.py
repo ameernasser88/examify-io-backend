@@ -9,6 +9,7 @@ urlpatterns = [
     path('exam/', examiner.ExamView.as_view()),
     path('exam/<str:id>/', examiner.SingleExamView.as_view()),
     path('exam/<str:id>/attendance/', examiner.AttendaceSheetView.as_view()),
+    path('exam/<str:id>/statistics/', examiner.ExamStatisticsView.as_view()),
     path('exam/<str:pk>/question/', examiner.QuestionView.as_view()),
     path('exam/<str:pk>/question/<str:id>/', examiner.OneQuestionApi.as_view()),
     path('exam/question/<str:pk>/answer/', examiner.AnswerView.as_view()),
