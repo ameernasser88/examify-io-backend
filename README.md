@@ -376,31 +376,37 @@ HTTP 200 OK
 ```
 #### GET exam/{exam_id}/statistics/
 * General:
-    - Retruns statistics for single exam.
+    - Retruns statistics for a single exam and its questions.
 * Request Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/{exam_id}/statistics/ -X GET -H "Content-Type: application/json" "Authorization: Token <ACCESS_TOKEN>" -d```
 * Response Sample:
 ```sh
 [
     {
-        "exam_name": "Maths"
+        "total_mark": 20.0,
+        "name": "Movies",
+        "exam_statistics": {
+            "avg": 29.5,
+            "max": 63.0,
+            "min": 10.0,
+            "num_of_students_submited_the_exam": 4,
+            "standard_deviation": 20.081085628023203
+        }
     },
     {
-        "total_mark": 20.0
-    },
-    {
-        "num_of_students_submited_the_exam": 4
-    },
-    {
-        "avg": 29.5
-    },
-    {
-        "max": 63.0
-    },
-    {
-        "min": 10.0
-    },
-    {
-        "standard_deviation": 20.081085628023203
+        "172": {
+            "text": "what was Sophie Turner's name in game of thrones ?",
+            "correct_answer": "Sansa",
+            "mark": 10.0,
+            "correct_count": 1,
+            "wrong_count": 1
+        },
+        "173": {
+            "text": "what was Christian Bale's name in The Dark Knight  ?",
+            "correct_answer": "Bruce Wayne",
+            "mark": 10.0,
+            "correct_count": 2,
+            "wrong_count": 0
+        }
     }
 ]
 ```

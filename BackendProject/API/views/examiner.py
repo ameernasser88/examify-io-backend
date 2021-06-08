@@ -386,6 +386,7 @@ class SupervisorView(APIView):
             return Response(data = serializer.data, status=status.HTTP_200_OK)
         except :
             return Response(status=status.HTTP_404_NOT_FOUND)
+
 class OneSupervisorView(APIView):
     permission_classes = [IsAuthenticated]
     def delete(self, request, id, sp):
@@ -405,16 +406,39 @@ class OneSupervisorView(APIView):
             return Response(status=status.HTTP_404_NOT_FOUND)
 
 class ExamStatisticsView(APIView):
+    permission_classes=[IsAuthenticated]
+
+    def get_questions_statistics(self, exam):
+        questions = Question.objects.filter(exam = exam)
+        all_questions_data = {}
+        for question in questions:
+            one_question_data = {}
+            correct_answer = Answer.objects.filter(question = question, is_correct = True).first()
+            one_question_data['text'] = question.text
+            one_question_data['correct_answer'] = correct_answer.text
+            one_question_data['mark'] = question.mark
+            all_students_answers = StudentAnswer.objects.filter(exam = exam, question = question)
+            wrong_count = 0
+            correct_count = 0
+            for answer in all_students_answers:
+                if answer.answer.is_correct:
+                    correct_count += 1
+                else:
+                    wrong_count += 1
+            one_question_data['correct_count'] = correct_count
+            one_question_data['wrong_count'] = wrong_count
+            all_questions_data[question.id] = one_question_data
+        return all_questions_data
+
     def get(self, request, id):
         exam = Exam.objects.get(id = id)
         exam_results = ExamResults.objects.filter(exam = exam)
         mark = 0
-        total_mark = Question.objects.filter(exam = exam).aggregate(total_mark = Sum('mark'))
-        name = {'exam_name':exam.exam_name}
-        avg = exam_results.aggregate(avg = Avg('mark'))
-        maximum = exam_results.aggregate(max = Max('mark'))
-        minimum = exam_results.aggregate(min = Min('mark'))
-        count = exam_results.aggregate(num_of_students_submited_the_exam = Count('student'))
-        stdev = exam_results.aggregate(standard_deviation = StdDev('mark'))
-        data = [name,total_mark,count,avg,minimum,maximum,stdev]
+        data = {}
+        data['total_mark'] = Question.objects.filter(exam = exam).aggregate(total_mark = Sum('mark'))['total_mark']
+        data['name'] = exam.exam_name
+        data['exam_statistics'] = exam_results.aggregate(avg = Avg('mark'), max = Max('mark'), min = Min('mark'), 
+            num_of_students_submited_the_exam = Count('student'), standard_deviation = StdDev('mark'))
+        questions_statistics = self.get_questions_statistics(exam = exam)
+        data = [data,questions_statistics]
         return Response(status=status.HTTP_200_OK, data = data)
