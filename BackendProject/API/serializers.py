@@ -89,13 +89,16 @@ class AssignedSupervisors(serializers.ModelSerializer):
 class StudentAllExamsSerializer(serializers.ModelSerializer):
     class Meta:
         model = AllowedStudents
-        fields = ('exam_id','exam_name','student_id','student_name', 'full_mark', 'student_mark', 'is_started')
+        fields = ('exam_id','exam_name','exam_startdate','exam_duration','student_id','student_name', 'full_mark', 'student_mark', 'is_started')
     student_name = serializers.SerializerMethodField('get_student_name')
     student_id = serializers.SerializerMethodField('get_student_id')
     exam_name = serializers.SerializerMethodField('get_exam_name')
     full_mark = serializers.SerializerMethodField('get_exam_full_mark')
     student_mark = serializers.SerializerMethodField('get_student_mark')
     is_started = serializers.SerializerMethodField('check_exam_is_started')
+    exam_startdate = serializers.SerializerMethodField('get_exam_startdate')
+    exam_duration = serializers.SerializerMethodField('get_exam_duration')
+
     def get_student_id(self, obj):
         user = User.objects.get(pk = obj.student.user.id)
         return user.id
@@ -105,6 +108,12 @@ class StudentAllExamsSerializer(serializers.ModelSerializer):
     def get_exam_name(self, obj):
         exam = Exam.objects.get(id = obj.exam.id)
         return exam.exam_name
+    def get_exam_startdate(self, obj):
+        exam = Exam.objects.get(id = obj.exam.id)
+        return exam.exam_startdate
+    def get_exam_duration(self, obj):
+        exam = Exam.objects.get(id = obj.exam.id)
+        return exam.exam_duration
     def get_exam_full_mark(self, obj):
         exam = Exam.objects.get(id = obj.exam.id)
         exam_questions = Question.objects.filter(exam = exam)
