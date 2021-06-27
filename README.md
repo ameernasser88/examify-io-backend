@@ -526,6 +526,17 @@ HTTP 200 OK
     }
 ]
 ```
+#### GET /exam/{exam_id}/time-left/
+* General:
+    - Returns time left for the exam.
+* Request Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/{exam_id}/time/ -H "Content-Type: application/json" "Authorization: Token <ACCESS_TOKEN>"
+        ```
+* Response Sample:
+```sh
+{
+    "time_left": "2:56:45.558412"
+}
+```
 ## For Student:
 #### GET student/dashboard/
 * General:

@@ -1,9 +1,11 @@
+from datetime import timedelta
 import math
 from django.contrib.auth import get_user_model
 from django.db.models import Count
 from django.db.models.aggregates import Avg, Max, Min, StdDev, Sum
 from django.utils.decorators import method_decorator
 from rest_framework.serializers import Serializer
+from django.utils import timezone
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
@@ -447,3 +449,23 @@ class ExamStatisticsView(APIView):
             return Response(status=status.HTTP_200_OK, data = data)
         except:
             return Response(status=status.HTTP_404_NOT_FOUND)
+
+class DuringExamView(APIView):
+    permission_classes=[IsAuthenticated]
+    def get(self, request, id):
+        exam = Exam.objects.get(id = id)
+        if exam.examiner.pk != request.user.id:
+            return Response(status=status.HTTP_401_UNAUTHORIZED )
+        mins,hrs = math.modf(exam.exam_duration)
+        error = {}
+        data = {}
+        exam_endtime = exam.exam_startdate + timedelta(hours = hrs, minutes=mins*60)
+        if not timezone.now() >= exam.exam_startdate :
+            error['error'] = ErrorMessages.objects.get(id = 3).error_message
+            return Response(data = error,status=status.HTTP_200_OK)
+        if not timezone.now() < exam_endtime:
+            error['error'] = ErrorMessages.objects.get(id = 2).error_message
+            return Response(data = error,status=status.HTTP_200_OK)
+        data['time_left'] = str(exam_endtime - timezone.now())
+        return Response(data = data,status=status.HTTP_200_OK)
+
