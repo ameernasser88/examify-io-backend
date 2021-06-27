@@ -56,7 +56,7 @@ INSTALLED_APPS = [
     'dj_rest_auth.registration',
     'API.apps.ApiConfig',
     'corsheaders',
-    'django-dia',
+
 
 ]
 
