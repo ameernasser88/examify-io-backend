@@ -529,7 +529,7 @@ HTTP 200 OK
 #### GET /exam/{exam_id}/time-left/
 * General:
     - Returns time left for the exam.
-* Request Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/{exam_id}/time/ -H "Content-Type: application/json" "Authorization: Token <ACCESS_TOKEN>"
+* Request Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/{exam_id}/time-left/ -H "Content-Type: application/json" "Authorization: Token <ACCESS_TOKEN>"
         ```
 * Response Sample:
 ```sh
@@ -619,4 +619,50 @@ HTTP 200 OK
 * Response Sample:
 ```sh
 HTTP 200 OK
+```
+## For Supervisor:
+#### GET supervisor/dashboard/
+* General:
+    - Returns list of exams for the logged in supervisor.
+* Request Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/supervisor/dashboard/ -H "Content-Type: application/json" "Authorization: Token <ACCESS_TOKEN>"
+        ```
+* Response Sample:
+```sh
+[
+    {
+        "exam_id": 165,
+        "exam_name": "Performance",
+        "exam_startdate": "2021-06-27T23:37:05Z",
+        "exam_duration": 2.0,
+        "is_started": "The Exam is Open"
+    }
+]
+```
+#### GET exam/{exam_id}/supervise/
+* General:
+    - Returns some exam details and assigned students to supervise.
+* Request Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/{exam_id}/supervise/ -H "Content-Type: application/json" "Authorization: Token <ACCESS_TOKEN>"
+        ```
+* Response Sample:
+```sh
+{
+    "exam_id": 165,
+    "exam_name": "Performance",
+    "exam_startdate": "2021-06-27T23:37:05Z",
+    "exam_duration": 3.0,
+    "students": [
+        {
+            "student_id": 6,
+            "student_name": "stu1"
+        },
+        {
+            "student_id": 19,
+            "student_name": "stu2"
+        },
+        {
+            "student_id": 1,
+            "student_name": "stu3"
+        }
+    ]
+}
 ```

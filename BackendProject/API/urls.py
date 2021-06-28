@@ -1,6 +1,6 @@
 from django.urls import path , include
 from . import views
-from . views import examiner, student ,general
+from . views import examiner, student, supervisor, general
 
 urlpatterns = [
     path('', general.index),
@@ -16,14 +16,16 @@ urlpatterns = [
     path('exam/question/<str:pk>/answer/<str:id>/', examiner.OneAnswerView.as_view()),
     path('exam/<str:id>/allowed-students/', examiner.AllowedStudentsView.as_view()),
     path('exam/<str:id>/allowed-students/<str:st>/', examiner.OneAllowedStudentsView.as_view()),
-    path('exam/<str:id>/start/', student.ExamView.as_view()),
-    path('exam/<str:id>/submit/', student.SubmitExam.as_view()),
+    path('exam/<str:id>/time-left/',examiner.DuringExamView.as_view()),
     path('exam/<str:id>/marks/', examiner.StudentMarksView.as_view()),
     path('exam/<str:id>/student/<str:st>/', examiner.StudentAnswerView.as_view()),
     path('exam/<str:id>/supervisors/', examiner.SupervisorView.as_view()),
     path('exam/<str:id>/supervisor/<str:sp>/', examiner.OneSupervisorView.as_view()),
+    path('exam/<str:id>/start/', student.ExamView.as_view()),
+    path('exam/<str:id>/submit/', student.SubmitExam.as_view()),
     path('student/dashboard/',student.StudentDashboardView.as_view()),
-    path('exam/<str:id>/time-left/',examiner.DuringExamView.as_view()),
+    path('supervisor/dashboard/',supervisor.SupervisorDashboardView.as_view()),
+    path('exam/<str:id>/supervise/',supervisor.OneExamToSuperviseView.as_view()),
 
     
 ]

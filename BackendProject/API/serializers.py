@@ -176,3 +176,36 @@ class StudentAnswerSerializer(serializers.ModelSerializer):
 
     def is_answer_correct(self, obj):
         return obj.answer.is_correct
+
+class SupervisorDashboardSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ExamSupervisors
+        fields = ('exam_id','exam_name','exam_startdate','exam_duration','is_started')
+    exam_id = serializers.SerializerMethodField('get_exam_id')
+    exam_name = serializers.SerializerMethodField('get_exam_name')
+    is_started = serializers.SerializerMethodField('check_exam_is_started')
+    exam_startdate = serializers.SerializerMethodField('get_exam_startdate')
+    exam_duration = serializers.SerializerMethodField('get_exam_duration')
+
+    def get_exam_id(self, obj):
+        return obj
+    def get_exam_name(self, obj):
+        exam = Exam.objects.get(id = obj)
+        return exam.exam_name
+    def get_exam_startdate(self, obj):
+        exam = Exam.objects.get(id = obj)
+        return exam.exam_startdate
+    def get_exam_duration(self, obj):
+        exam = Exam.objects.get(id = obj)
+        return exam.exam_duration
+    def check_exam_is_started(self, obj):
+        exam = Exam.objects.get(id = obj)
+        mins,hrs = math.modf(exam.exam_duration)
+        exam_endtime = exam.exam_startdate + timedelta(hours = hrs, minutes=mins*60)
+        if not timezone.now() >= exam.exam_startdate :
+            return 'The Exam has not started yet'
+        if not timezone.now() < exam_endtime:
+            return 'The Exam is Closed'
+        else:
+            return 'The Exam is Open'
+

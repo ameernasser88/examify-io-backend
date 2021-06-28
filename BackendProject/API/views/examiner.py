@@ -411,26 +411,29 @@ class ExamStatisticsView(APIView):
     permission_classes=[IsAuthenticated]
 
     def get_questions_statistics(self, exam):
-        questions = Question.objects.filter(exam = exam)
-        all_questions_data = {}
-        for question in questions:
-            one_question_data = {}
-            correct_answer = Answer.objects.filter(question = question, is_correct = True).first()
-            one_question_data['text'] = question.text
-            one_question_data['correct_answer'] = correct_answer.text
-            one_question_data['mark'] = question.mark
-            all_students_answers = StudentAnswer.objects.filter(exam = exam, question = question)
-            wrong_count = 0
-            correct_count = 0
-            for answer in all_students_answers:
-                if answer.answer.is_correct:
-                    correct_count += 1
-                else:
-                    wrong_count += 1
-            one_question_data['correct_count'] = correct_count
-            one_question_data['wrong_count'] = wrong_count
-            all_questions_data[question.id] = one_question_data
-        return all_questions_data
+        try:
+            questions = Question.objects.filter(exam = exam)
+            all_questions_data = {}
+            for question in questions:
+                one_question_data = {}
+                correct_answer = Answer.objects.filter(question = question, is_correct = True).first()
+                one_question_data['text'] = question.text
+                one_question_data['correct_answer'] = correct_answer.text
+                one_question_data['mark'] = question.mark
+                all_students_answers = StudentAnswer.objects.filter(exam = exam, question = question)
+                wrong_count = 0
+                correct_count = 0
+                for answer in all_students_answers:
+                    if answer.answer.is_correct:
+                        correct_count += 1
+                    else:
+                        wrong_count += 1
+                one_question_data['correct_count'] = correct_count
+                one_question_data['wrong_count'] = wrong_count
+                all_questions_data[question.id] = one_question_data
+            return all_questions_data
+        except :
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
     def get(self, request, id):
         try:
@@ -452,20 +455,21 @@ class ExamStatisticsView(APIView):
 
 class DuringExamView(APIView):
     permission_classes=[IsAuthenticated]
-    def get(self, request, id):
-        exam = Exam.objects.get(id = id)
-        if exam.examiner.pk != request.user.id:
-            return Response(status=status.HTTP_401_UNAUTHORIZED )
-        mins,hrs = math.modf(exam.exam_duration)
-        error = {}
-        data = {}
-        exam_endtime = exam.exam_startdate + timedelta(hours = hrs, minutes=mins*60)
-        if not timezone.now() >= exam.exam_startdate :
-            error['error'] = ErrorMessages.objects.get(id = 3).error_message
-            return Response(data = error,status=status.HTTP_200_OK)
-        if not timezone.now() < exam_endtime:
-            error['error'] = ErrorMessages.objects.get(id = 2).error_message
-            return Response(data = error,status=status.HTTP_200_OK)
-        data['time_left'] = str(exam_endtime - timezone.now())
-        return Response(data = data,status=status.HTTP_200_OK)
+    def get(self, request, id): #This method can be used for examiner, student and supervisor.
+        try:
+            exam = Exam.objects.get(id = id)
+            mins,hrs = math.modf(exam.exam_duration)
+            error = {}
+            data = {}
+            exam_endtime = exam.exam_startdate + timedelta(hours = hrs, minutes=mins*60)
+            if not timezone.now() >= exam.exam_startdate :
+                error['error'] = ErrorMessages.objects.get(id = 3).error_message
+                return Response(data = error,status=status.HTTP_200_OK)
+            if not timezone.now() < exam_endtime:
+                error['error'] = ErrorMessages.objects.get(id = 2).error_message
+                return Response(data = error,status=status.HTTP_200_OK)
+            data['time_left'] = str(exam_endtime - timezone.now())
+            return Response(data = data,status=status.HTTP_200_OK)
+        except :
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
