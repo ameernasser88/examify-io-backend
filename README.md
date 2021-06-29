@@ -423,10 +423,10 @@ HTTP 200 OK
 ```sh
 201 Created 
 ```
-#### DELETE exam/{exam_id}/supervisor/{supervisor_id}
+#### DELETE exam/{exam_id}/supervisor/{supervisor_id}/
 * General:
     - delete assigned supervisor to exam.
-* Request Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/{exam_id}/supervisor/{supervisor_id} -X DELETE -H "Content-Type: application/json" "Authorization: Token <ACCESS_TOKEN>" 
+* Request Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/{exam_id}/supervisor/{supervisor_id}/ -X DELETE -H "Content-Type: application/json" "Authorization: Token <ACCESS_TOKEN>" 
         ```
 * Response Sample:
 ```sh
