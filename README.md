@@ -412,11 +412,11 @@ HTTP 200 OK
     - adds supervisors to exam.
 * Request Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/{exam_id}/supervisors/ -X POST -H "Content-Type: application/json" "Authorization: Token <ACCESS_TOKEN>" -d
         '{
-            "supervisor": [
-                "super1",
-                "super2",
-                "super3"
-            ]
+                "supervisor": [
+                    "super1",
+                    "super2",
+                    "super3"
+                ]
         }' 
         ```
 * Response Sample:

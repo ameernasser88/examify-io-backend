@@ -352,6 +352,12 @@ class StudentAnswerView(APIView):
 
 class SupervisorView(APIView):
     permission_classes=[IsAuthenticated]
+    def get_supervisors_names(self, exam):
+        supervisors_ob = ExamSupervisors.objects.filter(exam = exam)
+        supervisors = []
+        for su in supervisors_ob:
+            supervisors.append(su.supervisor.user.username)
+        return supervisors
     def post(self, request, id):
         try:
             User = get_user_model()
@@ -372,6 +378,7 @@ class SupervisorView(APIView):
                 serializer = AddSupervisorToExamSerializer(data = data)
                 if serializer.is_valid():
                     serializer.save()
+            supervisors = self.get_supervisors_names(exam)
             assign_supervisors = reassign_supervisors_to_students(supervisors,exam)
             return Response(status=status.HTTP_200_OK)
         except:
