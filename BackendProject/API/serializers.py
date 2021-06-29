@@ -69,23 +69,6 @@ class AddSupervisorToExamSerializer(serializers.ModelSerializer):
         model = ExamSupervisors
         fields = '__all__'
 
-class AssignedSupervisors(serializers.ModelSerializer):
-    class Meta:
-        model = AllowedStudents
-        fields = ('supervisor','supervisor_name', 'student_id', 'student_name')
-    student_name = serializers.SerializerMethodField('get_student_name')
-    student_id = serializers.SerializerMethodField('get_student_id')
-    supervisor_name = serializers.SerializerMethodField('get_supervisor_name')
-    def get_student_id(self, obj):
-        user = User.objects.get(pk = obj.student.user.id)
-        return user.id
-    def get_student_name(self, obj):
-        user = User.objects.get(pk = obj.student.user.id)
-        return user.username
-    def get_supervisor_name(self, obj):
-        user = User.objects.get(id = obj.supervisor.user.id)
-        return user.username
-
 class StudentAllExamsSerializer(serializers.ModelSerializer):
     class Meta:
         model = AllowedStudents

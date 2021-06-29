@@ -10,7 +10,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
-from ..serializers import AddSupervisorToExamSerializer, AllowedStudentSerializer, AnswerSerializer, AssignedSupervisors, AttendanceSheetSerializer, ExamResultSerializer, ExamSerializer, QuestionSerializer, StudentAnswerSerializer, SupervisorSerializer
+from ..serializers import AddSupervisorToExamSerializer, AllowedStudentSerializer, AnswerSerializer, AttendanceSheetSerializer, ExamResultSerializer, ExamSerializer, QuestionSerializer, StudentAnswerSerializer, SupervisorSerializer
 from ..models import *
 from ..decorators import *
 from rest_framework.throttling import UserRateThrottle
@@ -383,9 +383,20 @@ class SupervisorView(APIView):
             exam = Exam.objects.get(id = id)
             if exam.examiner.pk != request.user.id:
                 return Response(status=status.HTTP_401_UNAUTHORIZED )
-            allowed_students = AllowedStudents.objects.filter(exam = exam)
-            serializer = AssignedSupervisors(instance=allowed_students, many = True)
-            return Response(data = serializer.data, status=status.HTTP_200_OK)
+            exams_supervisors = ExamSupervisors.objects.filter(exam = exam)
+            data = []
+            for supervisor in exams_supervisors:
+                entry = {}
+                entry['supervisor_id'] = supervisor.supervisor.user_id
+                entry['supervisor_name'] = supervisor.supervisor.user.username
+                students = AllowedStudents.objects.filter(supervisor = supervisor.supervisor, exam = exam)
+                supervisor_students = []
+                for student in students:
+                    supervisor_students.append(student.student.user.username)
+                entry['students'] = supervisor_students
+                data.append(entry)
+            return Response(data = data,status=status.HTTP_200_OK)
+
         except :
             return Response(status=status.HTTP_404_NOT_FOUND)
 

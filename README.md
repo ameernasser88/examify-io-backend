@@ -353,24 +353,21 @@ HTTP 200 OK
 ```sh
 [
     {
-        "id": 29,
-        "supervisor_name": "supervisor1",
-        "student_name": "stu1"
+        "supervisor_id": 45,
+        "supervisor_name": "super1",
+        "students": [
+            "stu1",
+            "stu2",
+            "stu3"
+        ]
     },
     {
-        "id": 26,
-        "supervisor_name": "supervisor2",
-        "student_name": "stu2"
-    },
-    {
-        "id": 27,
-        "supervisor_name": "supervisor3",
-        "student_name": "stu3"
-    },
-    {
-        "id": 28,
-        "supervisor_name": "supervisor1",
-        "student_name": "stu3"
+        "supervisor_id": 46,
+        "supervisor_name": "super2",
+        "students": [
+            "stu4",
+            "stu5"
+        ]
     }
 ]
 ```
