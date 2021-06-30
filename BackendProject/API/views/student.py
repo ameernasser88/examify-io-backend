@@ -60,6 +60,12 @@ class SubmitExam(APIView):
         if (student is None) or (exam is None):
             return Response(status = status.HTTP_404_NOT_FOUND)
 
+        submitted = ExamResults.objects.filter(student=student,exam=exam).count()
+        if submitted !=0:
+            error = {}
+            error['error'] = ErrorMessages.objects.get(id = 5).error_message
+            return Response(data = error,status=status.HTTP_401_UNAUTHORIZED)
+
         student_answers = request.data['student_answers']
         try:
             total_mark = 0
