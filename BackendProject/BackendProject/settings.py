@@ -11,6 +11,9 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 import os
 from pathlib import Path
+import environ
+env = environ.Env()
+environ.Env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -105,11 +108,16 @@ ACCOUNT_EMAIL_REQUIRED = False
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'examify',
-        'USER': 'root',
-        'PASSWORD': '123456789',
-        'HOST': 'examify.cl5ad1fxwqy7.us-east-2.rds.amazonaws.com',
-        'PORT': '5432'
+        # 'NAME': 'examify',
+        # 'USER': 'root',
+        # 'PASSWORD': '123456789',
+        # 'HOST': 'examify.cl5ad1fxwqy7.us-east-2.rds.amazonaws.com',
+        # 'PORT': '5432'
+        'NAME': env('NAME'),
+        'USER': env('USER'),
+        'PASSWORD': env('PASSWORD'),
+        'HOST': env('HOST'),
+        'PORT': env('PORT')
     }
 }
 
