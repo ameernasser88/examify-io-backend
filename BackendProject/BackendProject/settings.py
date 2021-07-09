@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '-+=l@z%d#y!kzs5t3@ldik*zysg9(hp78+23$qque=rb+)(!59'
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -81,7 +81,7 @@ SITE_ID = 1
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [], 
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -99,9 +99,9 @@ WSGI_APPLICATION = 'BackendProject.wsgi.application'
 AUTH_USER_MODEL = 'API.User'
 ACCOUNT_ADAPTER = 'API.adapters.CustomUserAccountAdapter'
 
-ACCOUNT_EMAIL_VERIFICATION = 'none'
 ACCOUNT_AUTHENTICATION_METHOD = 'username'
-ACCOUNT_EMAIL_REQUIRED = False
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = True
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
@@ -182,8 +182,8 @@ REST_FRAMEWORK = {
     #     'user_day': '3000/day',
     # }
 }
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 REST_AUTH_SERIALIZERS = {
     'TOKEN_SERIALIZER': 'API.serializers.TokenSerializer',
 }
-
