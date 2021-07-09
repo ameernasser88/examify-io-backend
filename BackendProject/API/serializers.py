@@ -25,6 +25,13 @@ class ExamSerializer(serializers.ModelSerializer):
         model = Exam
         fields ='__all__'
 
+
+class ProgrammingTestSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = ProgrammingTest
+        fields ='__all__'
+
 class AnswerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Answer
@@ -34,6 +41,13 @@ class QuestionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Question
         fields = '__all__'
+
+
+class ProgrammingQuestionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProgrammingQuestion
+        fields = '__all__'
+
 
 class AllowedStudentSerializer(serializers.ModelSerializer):
     class Meta:

@@ -95,6 +95,27 @@ class AllowedStudents(models.Model):
     def __str__(self):
         return str(self.exam) + " " + str(self.student) + " "+ str(self.supervisor)
 
+
+class ProgrammingTest(models.Model):
+    examiner = models.ForeignKey(Examiner,default=None, on_delete=models.CASCADE)
+    test_name = models.CharField(max_length=255, null=False,blank=False)
+    test_startdate = models.DateTimeField(null=False,blank=False)
+    test_duration = models.FloatField(null=False,blank=False)
+    def __str__(self) -> str:
+        return str(self.test_name)
+
+
+class ProgrammingQuestion(models.Model):
+    test = models.ForeignKey(ProgrammingTest, default=None, on_delete=models.CASCADE)
+    text = models.TextField()
+    def __str__(self) -> str:
+        return str(self.text)
+
+
+
+
+
+
 class ErrorMessages(models.Model):
     error_message = models.TextField()
     def __str__(self):

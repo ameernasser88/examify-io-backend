@@ -10,7 +10,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
-from ..serializers import AddSupervisorToExamSerializer, AllowedStudentSerializer, AnswerSerializer, AttendanceSheetSerializer, ExamResultSerializer, ExamSerializer, QuestionSerializer, StudentAnswerSerializer, SupervisorSerializer
+from ..serializers import *
 from ..models import *
 from ..decorators import *
 from rest_framework.throttling import UserRateThrottle
@@ -491,3 +491,66 @@ class DuringExamView(APIView):
         except :
             return Response(status=status.HTTP_404_NOT_FOUND)
 
+
+
+###### PROGRAMMING Questions ######################################
+
+class ProgrammingTestView(APIView):
+    permission_classes = [IsAuthenticated]
+    def post(self, request):
+        try:
+            user = Examiner.objects.get(user = request.user)
+            serializer = ProgrammingTestSerializer(data = request.data)
+            if serializer.is_valid():
+                serializer.save(examiner = user)
+                return Response(serializer.data,status= status.HTTP_201_CREATED)
+            return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+        except Examiner.DoesNotExist:
+            return Response(status = status.HTTP_404_NOT_FOUND)
+
+    def get(self, request):
+        try:
+            examiner = Examiner.objects.get(user = request.user)
+            tests = ProgrammingTest.objects.filter(examiner = examiner)
+            serializer = ProgrammingTestSerializer(instance = tests, many = True)
+            return Response(data= serializer.data, status= status.HTTP_200_OK)
+        except :
+            return Response(status = status.HTTP_404_NOT_FOUND)
+
+class SingleProgrammingTestView(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request, id):
+        test = ProgrammingTest.objects.get(id = id)
+        if test.examiner.pk != request.user.id:
+            return Response(status=status.HTTP_401_UNAUTHORIZED )
+        questions = ProgrammingQuestion.objects.filter(test = test)
+        data = {}
+        data['id'] = test.id
+        data['test'] = test.test_name
+        data['startdate'] = test.test_startdate
+        data['duration'] = test.test_duration
+        ques = {}
+        all_questions = []
+        for question in questions:
+            ques['id'] = question.id
+            ques['text'] = question.text
+            all_questions.append(ques)
+            ques = {}
+        data['questions'] = all_questions
+        return Response(data = data , status=status.HTTP_200_OK)
+
+
+
+
+
+class ProgrammingQuestionView(APIView):
+    permission_classes = [IsAuthenticated]
+    def post(self, request, pk):
+        test = ProgrammingTest.objects.get(id = pk)
+        serializer = ProgrammingQuestionSerializer(data = request.data)
+        if serializer.is_valid():
+            if request.user.id != test.examiner.pk:
+                return Response(status=status.HTTP_401_UNAUTHORIZED )
+            serializer.save(test = test)
+            return Response(data = serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status= status.HTTP_400_BAD_REQUEST)
