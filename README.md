@@ -534,6 +534,72 @@ HTTP 200 OK
     "time_left": "2:56:45.558412"
 }
 ```
+
+## For Examiner --- Programming Test
+
+
+#### POST /programming-test/
+* General:
+    - Returns the data of the added programming test.
+* Request Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/programming-test/ -X POST -H "Content-Type: application/json"  "Authorization: Token <ACCESS_TOKEN>" -d
+            '{
+            "test_name":"programming test - python ",
+            "test_startdate":"2021-09-27 02:25:33+02:00",
+            "test_duration": 3.0
+            }' 
+            ```
+* Response Sample:
+```sh
+{
+    "id": 2,
+    "test_name": "programming test - python",
+    "test_startdate": "2021-09-27T00:25:33Z",
+    "test_duration": 3.0,
+    "examiner": 40
+}
+```
+
+
+#### GET /programming-test/
+* General:
+    - Returns lists of programming tests for the logged in examiner.
+* Request Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/programming-test/ -H "Content-Type: application/json"  "Authorization: Token <ACCESS_TOKEN>"```
+* Response Sample:
+```sh
+[
+    {
+        "id": 1,
+        "test_name": "First programming test",
+        "test_startdate": "2021-07-27T00:25:33Z",
+        "test_duration": 3.0,
+        "examiner": 40
+    },
+    {
+        "id": 2,
+        "test_name": "programming test - python",
+        "test_startdate": "2021-09-27T00:25:33Z",
+        "test_duration": 3.0,
+        "examiner": 40
+    }
+]
+```
+
+#### POST /programming-test/{test_id}/question/
+* General:
+    - Returns the question that has been added.
+* Request Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/programming-test/{tes_id}/question/ -X POST -H "Content-Type: application/json"  "Authorization: Token <ACCESS_TOKEN>" -d
+            '{ "text" : "write a python fuction that takes an int list as an argument and returns the sum of it elements , list_sum(numbers)  , call it 2 time for (30 60 5 7 95 21) ( 4 51 -25 96 -74 60) " }' 
+        ```
+* Response Sample:
+```sh
+{
+    "id": 1,
+    "text": "write a python fuction that takes an int list as an argument and returns the sum of it elements , list_sum(numbers)  , call it 2 time for (30 60 5 7 95 21) ( 4 51 -25 96 -74 60)",
+    "test": 1
+}
+```
+
+
 ## For Student:
 #### GET student/dashboard/
 * General:
