@@ -587,6 +587,31 @@ HTTP 200 OK
 ]
 ```
 
+
+#### GET /programming-test/{test_id}/
+* General:
+    - Returns a whole test.
+* Request Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/programming-test/{test_id}/ -H "Content-Type: application/json"  "Authorization: Token <ACCESS_TOKEN>"```
+* Response Sample:
+```sh
+{
+    "id": 1,
+    "test": "First programming test",
+    "startdate": "2021-07-27T00:25:33Z",
+    "duration": 3.0,
+    "questions": [
+        {
+            "id": 1,
+            "text": "write a python fuction that takes an int list as an argument and returns the sum of it elements , list_sum(numbers)  , call it 2 time for (30 60 5 7 95 21) ( 4 51 -25 96 -74 60)"
+        },
+        {
+            "id": 2,
+            "text": "write a python fuction that takes an int list as an argument and returns the average of it elements , list_avg(numbers)  , call it 2 time for (30 60 5 7 95 21) ( 4 51 -25 96 -74 60)"
+        }
+    ]
+}
+```
+
 #### POST /programming-test/{test_id}/question/
 * General:
     - Returns the question that has been added.
