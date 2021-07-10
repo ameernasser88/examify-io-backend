@@ -628,6 +628,41 @@ HTTP 200 OK
 ```
 
 
+#### POST /programming-test/{test_id}/allowed-students/
+* General:
+    - Returns 201 or 400
+* Request Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/programming-test/{test_id}/allowed-students/ -X POST -H "Content-Type: application/json" "Authorization: Token <ACCESS_TOKEN>" -d
+            '{
+                "students":["student1","student2"]
+            }' 
+        ```
+* Response Sample:
+```sh
+{
+    "id": 2,
+    "student": [
+        10,
+        6
+    ],
+    "test" 1
+}
+```
+#### GET programming-test/{test_id}/allowed-students/
+* General:
+    - Returns list of students allowed to enter the exam.
+* Request Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/programming-test/{test_id}/allowed-students/ -H "Content-Type: application/json" "Authorization: Token <ACCESS_TOKEN>"
+        ```
+* Response Sample:
+```sh
+    {
+    "test": 1,
+    "student": [
+        "student1",
+        "student2"
+    ]
+}
+```
+
 ## For Student:
 #### GET student/dashboard/
 * General:
