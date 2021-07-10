@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from ..models import *
-from ..serializers import SupervisorDashboardSerializer
+from ..serializers import ReportViolationSerializer, SupervisorDashboardSerializer
 
 
 class SupervisorDashboardView(APIView):
@@ -43,6 +43,24 @@ class OneExamToSuperviseView(APIView):
             return Response(data = data, status = status.HTTP_200_OK)
         except :
             return Response(status=status.HTTP_404_NOT_FOUND)
+
+    def post(self, request, id, st):
+        exam = Exam.objects.get(id = id)
+        supervisor = Supervisor.objects.get(user = request.user.pk)
+        allowed_students = self.get(request,id)
+        print(type(allowed_students))
+        student = Student.objects.get(user = st)
+        violation = request.data['violation']
+        data = {'exam':exam.id,'supervisor':supervisor,'student':student,'violation':violation}
+        serializer = ReportViolationSerializer(data = data)
+        print(exam)
+        print(student)
+        # if serializer.is_valid():
+        #     serializer.save()
+        # else:
+        #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(status=status.HTTP_200_OK)
+
 
 
 

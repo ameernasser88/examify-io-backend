@@ -432,9 +432,11 @@ class ExamStatisticsView(APIView):
         try:
             questions = Question.objects.filter(exam = exam)
             all_questions_data = {}
+            count = 0
             for question in questions:
                 one_question_data = {}
                 correct_answer = Answer.objects.filter(question = question, is_correct = True).first()
+                one_question_data['id'] = question.id
                 one_question_data['text'] = question.text
                 one_question_data['correct_answer'] = correct_answer.text
                 one_question_data['mark'] = question.mark
@@ -448,7 +450,8 @@ class ExamStatisticsView(APIView):
                         wrong_count += 1
                 one_question_data['correct_count'] = correct_count
                 one_question_data['wrong_count'] = wrong_count
-                all_questions_data[question.id] = one_question_data
+                all_questions_data[count] = one_question_data
+                count += 1
             return all_questions_data
         except :
             return Response(status=status.HTTP_404_NOT_FOUND)
@@ -461,6 +464,7 @@ class ExamStatisticsView(APIView):
             exam_results = ExamResults.objects.filter(exam = exam)
             mark = 0
             data = {}
+            data['id'] = exam.id
             data['total_mark'] = Question.objects.filter(exam = exam).aggregate(total_mark = Sum('mark'))['total_mark']
             data['name'] = exam.exam_name
             data['exam_statistics'] = exam_results.aggregate(avg = Avg('mark'), max = Max('mark'), min = Min('mark'), 

@@ -60,6 +60,7 @@ class AttendanceSheetSerializer(serializers.ModelSerializer):
         fields = ('id','student_name','supervisor_name','enter_time','submit_time')
     student_name = serializers.SerializerMethodField('get_student_name')
     supervisor_name = serializers.SerializerMethodField('get_supervisor_name')
+    id = serializers.SerializerMethodField('get_student_id')
 
     def get_student_name(self, obj):
         user = User.objects.get(pk = obj.student.pk)
@@ -67,6 +68,9 @@ class AttendanceSheetSerializer(serializers.ModelSerializer):
     def get_supervisor_name(self, obj):
         user = User.objects.get(pk = obj.supervisor.pk)
         return user.username
+    def get_student_id(self, obj):
+        user = User.objects.get(pk = obj.student.pk)
+        return user.id
 
 class StudentSerializer(serializers.ModelSerializer):
     class Meta:
@@ -206,3 +210,7 @@ class SupervisorDashboardSerializer(serializers.ModelSerializer):
         else:
             return 'The Exam is Open'
 
+class ReportViolationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Violation
+        fields = '__all__'

@@ -32,6 +32,7 @@ urlpatterns = [
     #supervisor
     path('supervisor/dashboard/',supervisor.SupervisorDashboardView.as_view()),
     path('exam/<str:id>/supervise/',supervisor.OneExamToSuperviseView.as_view()),
+    path('exam/<str:id>/supervise/student/<str:st>/',supervisor.OneExamToSuperviseView.as_view()),
 
     
 ]

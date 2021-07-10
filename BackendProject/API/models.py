@@ -1,8 +1,12 @@
+from datetime import timezone
 from typing import Callable
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.db.models.base import Model
 from django.db.models.deletion import CASCADE, SET_NULL
 from django.db.models.fields.related import ForeignKey
+from django.utils.timezone import now
+
 
 class User(AbstractUser):
     USER_TYPE_CHOICES = (
@@ -120,3 +124,11 @@ class ErrorMessages(models.Model):
     error_message = models.TextField()
     def __str__(self):
         return str(self.error_message)
+
+
+class Violation(models.Model):
+    violation = models.TextField()
+    time = models.DateTimeField(null= False, default=now)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    supervisor = models.ForeignKey(Supervisor, on_delete=models.CASCADE)
+    exam = models.ForeignKey(Exam, on_delete=models.CASCADE)
