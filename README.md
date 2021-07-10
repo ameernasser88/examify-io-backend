@@ -700,6 +700,30 @@ HTTP 200 OK
     }
 ]
 ```
+
+#### GET student/dashboard/programming-tests/
+* General:
+    - Returns all programming tests for the logged in student.
+* Request Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/student/dashboard/programming-tests/ -H "Authorization: Token <ACCESS_TOKEN>" ```
+* Response Sample:
+```sh
+[
+{"test_id":1,"test_name":"First programming test",
+"test_startdate":"2021-07-27T00:25:33Z",
+"test_duration":3.0,"student_id":28,
+"student_name":"ameerstudent"
+} ,
+
+{"test_id":2,"test_name":"programming test - python",
+"test_startdate":"2021-07-29T00:25:33Z",
+"test_duration":3.0,"student_id":28,
+"student_name":"ameerstudent"
+}
+
+]
+```
+
+
 #### GET /exam/{exam_id}/start/
 * General:
     - Returns the whole exam for the student.
