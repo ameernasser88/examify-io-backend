@@ -22,6 +22,12 @@ class SupervisorDashboardView(APIView):
 
 class OneExamToSuperviseView(APIView):
     permission_classes = [IsAuthenticated]
+    def check_supervisor(self, exam, supervisor,student):
+        allowed_students = AllowedStudents.objects.filter(exam = exam, supervisor = supervisor, student = student)
+        if allowed_students:
+            return True
+        return False
+        
     def get(self, request, id):
         try:
             exam = Exam.objects.get(id = id)
@@ -45,21 +51,23 @@ class OneExamToSuperviseView(APIView):
             return Response(status=status.HTTP_404_NOT_FOUND)
 
     def post(self, request, id, st):
-        exam = Exam.objects.get(id = id)
-        supervisor = Supervisor.objects.get(user = request.user.pk)
-        allowed_students = self.get(request,id)
-        print(type(allowed_students))
-        student = Student.objects.get(user = st)
-        violation = request.data['violation']
-        data = {'exam':exam.id,'supervisor':supervisor,'student':student,'violation':violation}
-        serializer = ReportViolationSerializer(data = data)
-        print(exam)
-        print(student)
-        # if serializer.is_valid():
-        #     serializer.save()
-        # else:
-        #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        return Response(status=status.HTTP_200_OK)
+        try:
+            exam = Exam.objects.get(id = id)
+            supervisor = Supervisor.objects.get(user = request.user.pk)
+            student = Student.objects.get(user = st)
+            allowed_students = self.check_supervisor(exam,supervisor,student)
+            if not allowed_students:
+                return Response(status=status.HTTP_401_UNAUTHORIZED)
+            violation = request.data['violation']
+            data = {'exam':exam.id,'supervisor':supervisor,'student':student,'violation':violation}
+            serializer = ReportViolationSerializer(data = data)
+            if serializer.is_valid():
+                serializer.save()
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(status=status.HTTP_200_OK)
+        except:
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
 
 

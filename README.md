@@ -379,6 +379,7 @@ HTTP 200 OK
 ```sh
 [
     {
+        "id": 163,
         "total_mark": 20.0,
         "name": "Movies",
         "exam_statistics": {
@@ -390,14 +391,16 @@ HTTP 200 OK
         }
     },
     {
-        "172": {
+        "0": {
+            "id": 269,
             "text": "what was Sophie Turner's name in game of thrones ?",
             "correct_answer": "Sansa",
             "mark": 10.0,
             "correct_count": 1,
             "wrong_count": 1
         },
-        "173": {
+        "1": {
+            "id": 270,
             "text": "what was Christian Bale's name in The Dark Knight  ?",
             "correct_answer": "Bruce Wayne",
             "mark": 10.0,
@@ -728,4 +731,18 @@ HTTP 200 OK
         }
     ]
 }
+```
+#### POST exam/{exam_id}/supervise/student/{student_id}/
+* General:
+    -Assigned supervisor can reports a violation.
+* Request Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/{exam_id}/supervise/student/{student_id}/ -H "Authorization: Token <ACCESS_TOKEN>" ```
+* Response Sample:
+```sh
+{
+    "violation": "cheating from the mobile phone"
+}
+```
+* Response Sample:
+```sh
+200 OK
 ```
