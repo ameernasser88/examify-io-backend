@@ -687,6 +687,40 @@ HTTP 200 OK
     ]
 }
 ```
+
+
+#### GET /programming-test/{test_id}/student/{student_id}/
+* General:
+    - Returns the test answers of the student.
+* Request Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/programming-test/{test_id}/student/{student_id}/  -H "Content-Type: application/json" "Authorization: Token <ACCESS_TOKEN>"
+        ```
+* Response Sample:
+```sh
+[
+    {
+        "student_name": "ameerstudent",
+        "student": 28,
+        "test": 3,
+        "test_name": "programming test - ruby",
+        "question": 3,
+        "question_text": "write a ruby fuction that takes an int list as an argument and returns the sum of it elements",
+        "answer": "x=2 \ny=5\nprint(x+y)",
+        "programming_language": "python3",
+        "output": "{\"output\":\"7\\n\",\"statusCode\":200,\"memory\":\"7348\",\"cpuTime\":\"0.02\"}"
+    },
+    {
+        "student_name": "ameerstudent",
+        "student": 28,
+        "test": 3,
+        "test_name": "programming test - ruby",
+        "question": 4,
+        "question_text": "write a ruby fuction that takes an int list as an argument and returns the avg of it elements",
+        "answer": "x=2 \ny=5\nprint(x+y)",
+        "programming_language": "python3",
+        "output": "{\"output\":\"7\\n\",\"statusCode\":200,\"memory\":\"7432\",\"cpuTime\":\"0.01\"}"
+    }
+]
+```
 ## For Student:
 #### GET student/dashboard/
 * General:
