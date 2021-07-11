@@ -497,7 +497,31 @@ class DuringExamView(APIView):
         except :
             return Response(status=status.HTTP_404_NOT_FOUND)
 
-
+class ShowViolationsView(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request, id):
+        try:
+            exam = Exam.objects.get(id = id)
+            if exam.examiner.pk != request.user.id:
+                return Response(status=status.HTTP_401_UNAUTHORIZED )
+            violations = Violation.objects.filter(exam = exam)
+            data = {}
+            data['id'] = exam.id
+            data['exam_name'] = exam.exam_name
+            all_violations = []
+            entry = {}
+            for violation in violations:
+                entry['id'] = violation.student.user_id
+                entry['student'] = violation.student.user.username
+                entry['violation'] = violation.violation
+                entry['supervisor'] = violation.supervisor.user.username
+                entry['time'] = str(violation.time)
+                all_violations.append(entry)
+                entry = {}
+            data['violations'] = all_violations
+            return Response(data = data,status=status.HTTP_200_OK)
+        except :
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
 ###### PROGRAMMING Questions ######################################
 
@@ -590,10 +614,6 @@ class ProgrammingTestAllowedStudentsView(APIView):
 
         except:
             return Response(status=status.HTTP_404_NOT_FOUND)
-
-
-
-
 
     def get(self, request, id):
         try :

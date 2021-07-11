@@ -483,6 +483,34 @@ HTTP 200 OK
     }
 ]
 ```
+#### GET /exam/{exam_id}/violations/
+* General:
+    - Returns list of students marks in exam.
+* Request Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/exam/{exam_id}/violations/ -H "Content-Type: application/json" "Authorization: Token <ACCESS_TOKEN>"
+        ```
+* Response Sample:
+```sh
+{
+    "id": 165,
+    "exam_name": "Performance",
+    "violations": [
+        {
+            "id": 6,
+            "student": "student1",
+            "violation": "cheating from the mobile phone",
+            "supervisor": "super2",
+            "time": "2021-07-10 18:04:39.827472+00:00"
+        },
+        {
+            "id": 18,
+            "student": "student2",
+            "violation": "cheating from the book",
+            "supervisor": "super3",
+            "time": "2021-07-11 01:37:53.449630+00:00"
+        }
+    ]
+}
+```
 #### GET /exam/{exam_id}/student/{student_id}/
 * General:
     - Returns the exam of the student.
@@ -537,10 +565,7 @@ HTTP 200 OK
     "time_left": "2:56:45.558412"
 }
 ```
-
 ## For Examiner --- Programming Test
-
-
 #### POST /programming-test/
 * General:
     - Returns the data of the added programming test.
@@ -662,7 +687,6 @@ HTTP 200 OK
     ]
 }
 ```
-
 ## For Student:
 #### GET student/dashboard/
 * General:
