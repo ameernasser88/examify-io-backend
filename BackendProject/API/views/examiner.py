@@ -281,9 +281,13 @@ class AllowedStudentsView(APIView):
             data = {}
             User = get_user_model()
             data['exam'] = exam.id
+            entry = {}
             for student in students_id:
-                user = User.objects.get(pk = student.get('student')).username
-                students_name.append(user)
+                user = User.objects.get(pk = student.get('student'))
+                entry['student_id'] = user.id
+                entry['student_name'] = user.username
+                students_name.append(entry)
+                entry = {}
             data['student'] = students_name            
             return Response(data = data, status=status.HTTP_200_OK)
         except:

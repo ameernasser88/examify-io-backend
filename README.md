@@ -340,10 +340,28 @@ HTTP 200 OK
 * Response Sample:
 ```sh
     {
-    "exam": 1,
+    "exam": 165,
     "student": [
-        "student1",
-        "student2"
+        {
+            "student_id": 28,
+            "student_name": "stu1"
+        },
+        {
+            "student_id": 19,
+            "student_name": "stu2"
+        },
+        {
+            "student_id": 18,
+            "student_name": "stu3"
+        },
+        {
+            "student_id": 1,
+            "student_name": "stu4"
+        },
+        {
+            "student_id": 6,
+            "student_name": "stu5"
+        }
     ]
 }
 ```
