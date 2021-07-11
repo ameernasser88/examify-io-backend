@@ -48,6 +48,17 @@ class ProgrammingQuestionSerializer(serializers.ModelSerializer):
         model = ProgrammingQuestion
         fields = '__all__'
 
+class StudentProgrammingAnswerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = StudentProgrammingAnswer
+        fields = '__all__'
+
+
+
+class ProgrammingTestAllowedStudentsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProgrammingTestAllowedStudents
+        fields = '__all__'
 
 class AllowedStudentSerializer(serializers.ModelSerializer):
     class Meta:
@@ -138,6 +149,46 @@ class StudentAllExamsSerializer(serializers.ModelSerializer):
             return 'The Exam is Closed'
         else:
             return 'The Exam is Open'
+
+
+
+class StudentAllProgrammingTestsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProgrammingTestAllowedStudents
+        fields = ('test_id','test_name','test_startdate','test_duration','student_id','student_name')
+    student_name = serializers.SerializerMethodField('get_student_name')
+    student_id = serializers.SerializerMethodField('get_student_id')
+    test_name = serializers.SerializerMethodField('get_test_name')
+    test_startdate = serializers.SerializerMethodField('get_test_startdate')
+    test_duration = serializers.SerializerMethodField('get_test_duration')
+
+    def get_student_id(self, obj):
+        user = User.objects.get(pk = obj.student.user.id)
+        return user.id
+    def get_student_name(self, obj):
+        user = User.objects.get(pk = obj.student.user.id)
+        return user.username
+    def get_test_name(self, obj):
+        test = ProgrammingTest.objects.get(id = obj.test.id)
+        return test.test_name
+    def get_test_startdate(self, obj):
+        test = ProgrammingTest.objects.get(id = obj.test.id)
+        return test.test_startdate
+    def get_test_duration(self, obj):
+        test = ProgrammingTest.objects.get(id = obj.test.id)
+        return test.test_duration
+
+    def check_test_is_started(self, obj):
+        test = ProgrammingTest.objects.get(id = obj.test.id)
+        mins,hrs = math.modf(test.exam_duration)
+        exam_endtime = test.exam_startdate + timedelta(hours = hrs, minutes=mins*60)
+        if not timezone.now() >= test.exam_startdate :
+            return 'The Exam has not started yet'
+        if not timezone.now() < exam_endtime:
+            return 'The Exam is Closed'
+        else:
+            return 'The Exam is Open'
+
 class ExamResultSerializer(serializers.ModelSerializer):
     
     class Meta:

@@ -26,10 +26,12 @@ urlpatterns = [
     path('programming-test/', examiner.ProgrammingTestView.as_view()),
     path('programming-test/<str:id>/', examiner.SingleProgrammingTestView.as_view()),
     path('programming-test/<str:pk>/question/', examiner.ProgrammingQuestionView.as_view()),
+    path('programming-test/<str:id>/allowed-students/', examiner.ProgrammingTestAllowedStudentsView.as_view()),
     #student
     path('exam/<str:id>/start/', student.ExamView.as_view()),
     path('exam/<str:id>/submit/', student.SubmitExam.as_view()),
     path('student/dashboard/',student.StudentDashboardView.as_view()),
+    path('student/dashboard/programming-tests/',student.StudentProgrammingTestsDashboardView.as_view()),
     #supervisor
     path('supervisor/dashboard/',supervisor.SupervisorDashboardView.as_view()),
     path('exam/<str:id>/supervise/',supervisor.OneExamToSuperviseView.as_view()),
