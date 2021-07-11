@@ -229,6 +229,43 @@ class StudentAnswerSerializer(serializers.ModelSerializer):
     def is_answer_correct(self, obj):
         return obj.answer.is_correct
 
+
+class StudentProgrammingAnswerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = StudentProgrammingAnswer
+        fields = ('student_name', 'student','test', 'test_name', 'question', 'question_text', 'answer', 'programming_language', 'output')
+
+    test_name = serializers.SerializerMethodField('get_test_name')
+    student_name = serializers.SerializerMethodField('get_student_name')
+    question_text = serializers.SerializerMethodField('get_question_text')
+    answer = serializers.SerializerMethodField('get_answer')
+    output = serializers.SerializerMethodField('get_output')
+    programming_language = serializers.SerializerMethodField('get_programming_language')
+
+
+    def get_test_name(self, obj):
+        return obj.test.test_name
+
+    def get_student_name(self, obj):
+        return obj.student.user.username
+
+    def get_question_text(self, obj):
+        return obj.question.text
+
+    def get_answer(self, obj):
+        return obj.answer
+
+    def get_answer(self, obj):
+        return obj.answer
+
+    def get_programming_language(self, obj):
+        return obj.programming_language
+
+    def get_output(self, obj):
+        return obj.output
+
+
+
 class SupervisorDashboardSerializer(serializers.ModelSerializer):
     class Meta:
         model = ExamSupervisors

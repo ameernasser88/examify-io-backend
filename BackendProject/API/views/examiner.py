@@ -633,3 +633,18 @@ class ProgrammingTestAllowedStudentsView(APIView):
             return Response(data = data, status=status.HTTP_200_OK)
         except:
             return Response(status = status.HTTP_404_NOT_FOUND)
+
+
+class StudentProgrammingAnswerView(APIView):
+    permission_classes=[IsAuthenticated]
+    def get(self, request, id, st):
+        try:
+            test = ProgrammingTest.objects.get(id=id)
+            student = Student.objects.get(user_id=st)
+            if test.examiner.pk != request.user.id:
+                return Response(status=status.HTTP_401_UNAUTHORIZED )
+            student_answers = StudentProgrammingAnswer.objects.filter(test=test, student = student)
+            serializer = StudentProgrammingAnswerSerializer(student_answers, many=True)
+            return Response(data = serializer.data, status= status.HTTP_202_ACCEPTED)
+        except:
+            return Response(status=status.HTTP_404_NOT_FOUND)
