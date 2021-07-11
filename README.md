@@ -80,6 +80,17 @@ python manage.py runserver
 }
 ```
 ## For Examiner:
+#### GET /most-recent-exam/
+* General:
+    - Returns the most recent exam id for the logged in examiner.
+* Request Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/most-recent-exam/ -H "Content-Type: application/json" "Authorization: Token <ACCESS_TOKEN>"
+        ```
+* Response Sample:
+```sh
+{
+    "id": 157
+}
+```
 #### POST /exam/
 * General:
     - Returns exam data.
@@ -565,6 +576,7 @@ HTTP 200 OK
     "time_left": "2:56:45.558412"
 }
 ```
+
 ## For Examiner --- Programming Test
 #### POST /programming-test/
 * General:

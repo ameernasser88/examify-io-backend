@@ -523,6 +523,23 @@ class ShowViolationsView(APIView):
         except :
             return Response(status=status.HTTP_404_NOT_FOUND)
 
+class MostRecentExamView(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request):
+        try:
+            examiner = Examiner.objects.get(user = request.user)
+            exams = Exam.objects.filter(examiner = examiner).order_by('-exam_startdate')
+            data={}
+            for exam in exams:
+                mins, hrs = math.modf(exam.exam_duration)
+                exam_endtime = exam.exam_startdate + timedelta(hours=hrs, minutes=mins * 60)
+                if not timezone.now() < exam_endtime:
+                    data['id'] = exam.id
+                    return Response(data = data,status=status.HTTP_200_OK)
+            return Response(status=status.HTTP_200_OK)
+        except :
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
 ###### PROGRAMMING Questions ######################################
 
 class ProgrammingTestView(APIView):

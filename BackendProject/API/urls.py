@@ -22,6 +22,7 @@ urlpatterns = [
     path('exam/<str:id>/supervisors/', examiner.SupervisorView.as_view()),
     path('exam/<str:id>/supervisor/<str:sp>/', examiner.OneSupervisorView.as_view()),
     path('exam/<str:id>/violations/', examiner.ShowViolationsView.as_view()),
+    path('most-recent-exam/',examiner.MostRecentExamView.as_view()),
     #examiner - programming test
     path('programming-test/', examiner.ProgrammingTestView.as_view()),
     path('programming-test/<str:id>/', examiner.SingleProgrammingTestView.as_view()),
