@@ -813,6 +813,27 @@ HTTP 200 OK
 "4":"write a ruby fuction that takes an int list as an argument and returns the avg of it elements"}}
 ```
 
+#### POST /programming-test/{test_id}/submit/
+* General:
+    - Submits all exam answers for the student.
+* Request Sample: ```curl http://ec2-18-191-113-113.us-east-2.compute.amazonaws.com:8000/programming-test/{test_id}/submit/ -X POST -H "Content-Type: application/json" "Authorization: Token <ACCESS_TOKEN>" -d
+            '{
+    {
+    "student_answers"
+    : 
+    {
+    "3" : ["python3" , "x=2 \ny=5\nprint(x+y)"],
+    
+    "4" : ["python3" , "x=2 \ny=5\nprint(x+y)"] 
+    }
+    }
+}'```
+    -  where question id   is 3   and python3  is chosen programming language , "x=2 \ny=5\nprint(x+y)" is the code snippet and it should be an escaped string
+* Response Sample:
+```sh
+HTTP 200 OK
+```
+
 
 ## For Supervisor:
 #### GET supervisor/dashboard/
