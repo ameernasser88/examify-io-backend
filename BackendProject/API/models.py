@@ -1,4 +1,3 @@
-from datetime import timezone
 from typing import Callable
 from django.db import models
 from django.contrib.auth.models import AbstractUser
