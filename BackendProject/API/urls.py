@@ -33,6 +33,8 @@ urlpatterns = [
     path('student/dashboard/',student.StudentDashboardView.as_view()),
     path('student/dashboard/programming-tests/',student.StudentProgrammingTestsDashboardView.as_view()),
     path('programming-test/<str:id>/start/', student.ProgrammingTestView.as_view()),
+    path('programming-test/<str:id>/submit/', student.SubmitProgrammingTest.as_view()),
+
     #supervisor
     path('supervisor/dashboard/',supervisor.SupervisorDashboardView.as_view()),
     path('exam/<str:id>/supervise/',supervisor.OneExamToSuperviseView.as_view()),

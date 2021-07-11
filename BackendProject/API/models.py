@@ -144,6 +144,9 @@ class StudentProgrammingAnswer(models.Model):
     answer = models.TextField()
     output = models.TextField(null=True)
 
+    def ___str__(self):
+        return str(self.studet) + " "+ str(self.question.text) +" "+str(self.test)
+
 
 
 class ErrorMessages(models.Model):
