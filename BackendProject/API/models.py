@@ -100,6 +100,8 @@ class AllowedStudents(models.Model):
         return str(self.exam) + " " + str(self.student) + " "+ str(self.supervisor)
 
 
+####### Programming ################
+
 class ProgrammingTest(models.Model):
     examiner = models.ForeignKey(Examiner,default=None, on_delete=models.CASCADE)
     test_name = models.CharField(max_length=255, null=False,blank=False)
@@ -116,7 +118,31 @@ class ProgrammingQuestion(models.Model):
         return str(self.text)
 
 
+class ProgrammingTestAllowedStudents(models.Model):
+    student = ForeignKey(Student, on_delete=models.CASCADE)
+    test = ForeignKey(ProgrammingTest, on_delete=models.CASCADE)
+    enter_time = models.DateTimeField(null= True, blank= True, default= None)
+    submit_time = models.DateTimeField(null= True, blank= True, default= None)
 
+    def __str__(self):
+        return str(self.student) + " " + str(self.test)
+
+
+class StudentProgrammingAnswer(models.Model):
+    programming_languages = (
+        ("csharp", 'csharp'),
+        ("python3", 'python3'),
+        ("java", 'java'),
+        ("php", 'php'),
+        ("cpp14", 'cpp14'),
+        ("go", 'go'),
+    )
+    student = models.ForeignKey(Student,on_delete=models.CASCADE)
+    test = models.ForeignKey(ProgrammingTest, on_delete=models.CASCADE)
+    question = models.ForeignKey(ProgrammingQuestion, on_delete=models.CASCADE)
+    programming_language = models.CharField(choices=programming_languages,default="python3",null=False, max_length=100)
+    answer = models.TextField()
+    output = models.TextField(null=True)
 
 
 

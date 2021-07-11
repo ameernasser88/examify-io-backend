@@ -1,4 +1,4 @@
-from ..serializers import StudentAllExamsSerializer
+from ..serializers import *
 import math
 from django.utils.decorators import method_decorator
 from ..models import *
@@ -98,4 +98,13 @@ class StudentDashboardView(APIView):
         user = Student.objects.get(user = request.user.pk)
         student_exams = AllowedStudents.objects.filter(student = user)
         serializer = StudentAllExamsSerializer(student_exams, many = True)
+        return Response(status = status.HTTP_200_OK, data = serializer.data)
+
+
+class StudentProgrammingTestsDashboardView(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request):
+        user = Student.objects.get(user = request.user.pk)
+        student_exams = ProgrammingTestAllowedStudents.objects.filter(student = user)
+        serializer = StudentAllProgrammingTestsSerializer(student_exams, many = True)
         return Response(status = status.HTTP_200_OK, data = serializer.data)

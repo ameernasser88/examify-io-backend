@@ -13,6 +13,8 @@ from rest_framework import status
 from ..serializers import *
 from ..models import *
 from ..decorators import *
+import json
+from django.http import JsonResponse
 from rest_framework.throttling import UserRateThrottle
 
 def get_allowed_studnts(id):
@@ -558,3 +560,56 @@ class ProgrammingQuestionView(APIView):
             serializer.save(test = test)
             return Response(data = serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status= status.HTTP_400_BAD_REQUEST)
+
+
+class ProgrammingTestAllowedStudentsView(APIView):
+    permission_classes=[IsAuthenticated]
+    def post(self, request, id):
+        User = get_user_model()
+        usernames = request.data['students']
+        try:
+            test = ProgrammingTest.objects.get(id=id)
+            if request.user.id != test.examiner.pk:
+                return Response(status=status.HTTP_401_UNAUTHORIZED)
+            data = {}
+            data['test'] = test.id
+            for username in usernames:
+                user = User.objects.get(username = username)
+                student = Student.objects.get(user = user)
+                allowed_students = ProgrammingTestAllowedStudents.objects.filter(test =test, student = student)
+                if allowed_students:
+                    continue
+                data['student'] = student
+                data['id'] = user.id
+                serializer = ProgrammingTestAllowedStudentsSerializer(data = data)
+                if serializer.is_valid():
+                    serializer.save()
+                else:
+                    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(status=status.HTTP_201_CREATED)
+
+        except:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+
+
+
+    def get(self, request, id):
+        try :
+            allowed_studnts = ProgrammingTestAllowedStudents.objects.filter(test = id)
+            students_id = allowed_studnts.values('student')
+            students_name = []
+            test = ProgrammingTest.objects.get(id=id)
+            if test.examiner.pk != request.user.id:
+                return Response(status=status.HTTP_401_UNAUTHORIZED)
+            data = {}
+            User = get_user_model()
+            data['test'] = test.id
+            for student in students_id:
+                user = User.objects.get(pk = student.get('student')).username
+                students_name.append(user)
+            data['student'] = students_name
+            return Response(data = data, status=status.HTTP_200_OK)
+        except:
+            return Response(status = status.HTTP_404_NOT_FOUND)
