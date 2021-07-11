@@ -234,6 +234,12 @@ class AllowedStudentsView(APIView):
     # ]
 
     permission_classes=[IsAuthenticated]
+    def get_supervisors_names(self, exam):
+        supervisors_ob = ExamSupervisors.objects.filter(exam = exam)
+        supervisors = []
+        for su in supervisors_ob:
+            supervisors.append(su.supervisor.user.username)
+        return supervisors
     def post(self, request, id):
         User = get_user_model()
         usernames = request.data['students']
@@ -256,12 +262,12 @@ class AllowedStudentsView(APIView):
                 serializer = AllowedStudentSerializer(data = data)
                 if serializer.is_valid():
                     serializer.save()
-                    supervisors = []
-                    for supervisor in supervisors_ids:
-                        if supervisor['supervisor'] is None:
-                            continue
-                        supervisor_name = User.objects.get(id=supervisor['supervisor'])
-                        supervisors.append(supervisor_name.username)
+                    supervisors = self.get_supervisors_names(exam)
+                    # for supervisor in supervisors_ids:
+                    #     if supervisor['supervisor'] is None:
+                    #         continue
+                    #     supervisor_name = User.objects.get(id=supervisor['supervisor'])
+                    #     supervisors.append(supervisor_name.username)
                     reassign_supervisors = reassign_supervisors_to_students(supervisors, exam)
                 else:
                     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
